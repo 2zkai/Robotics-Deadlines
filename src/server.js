@@ -20,12 +20,25 @@ app.get('/api/conferences', (req, res) => {
 
 // 添加新会议
 app.post('/api/conferences', (req, res) => {
-  const { name, deadline } = req.body;
-  database.addConference(name, deadline, (err, row) => {
+  const { name, deadline, category } = req.body;
+  database.addConference(name, deadline, category, (err, row) => {
     if (err) {
       res.status(500).send(err.message);
     } else {
       res.status(201).json(row);
+    }
+  });
+});
+
+// 更新会议分类
+app.put('/api/conferences/:id/category', (req, res) => {
+  const { id } = req.params;
+  const { category } = req.body;
+  database.updateConferenceCategory(id, category, (err) => {
+    if (err) {
+      res.status(500).send(err.message);
+    } else {
+      res.status(200).json({ message: '分类更新成功' });
     }
   });
 });

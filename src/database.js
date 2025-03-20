@@ -8,7 +8,8 @@ const db = new sqlite3.Database('./roboddl.db', (err) => {
     db.run(`CREATE TABLE IF NOT EXISTS conferences (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
-      deadline TEXT NOT NULL
+      deadline TEXT NOT NULL,
+      category TEXT NOT NULL
     )`);
   }
 });
@@ -21,13 +22,25 @@ function getConferences(callback) {
 }
 
 // 添加新会议
-function addConference(name, deadline, callback) {
-  db.run('INSERT INTO conferences (name, deadline) VALUES (?, ?)', [name, deadline], function(err) {
-    callback(err, { id: this.lastID, name, deadline });
-  });
+function addConference(name, deadline, category, callback) {
+  db.run('INSERT INTO conferences (name, deadline, category) VALUES (?, ?, ?)', 
+    [name, deadline, category], 
+    function(err) {
+      callback(err, { id: this.lastID, name, deadline, category });
+    });
+}
+
+// 更新会议分类
+function updateConferenceCategory(id, category, callback) {
+  db.run('UPDATE conferences SET category = ? WHERE id = ?', 
+    [category, id], 
+    function(err) {
+      callback(err);
+    });
 }
 
 module.exports = {
   getConferences,
-  addConference
+  addConference,
+  updateConferenceCategory
 };

@@ -8,22 +8,36 @@
 </head>
 <body>
     <div class="container">
-        <h1>Robotics-Deadlines - 学术会议投稿倒计时</h1>
-        <div class="form-container">
-            <label for="conference-name">会议名称:</label>
-            <input type="text" id="conference-name" placeholder="输入会议名称" />
-            <br/><br/>
-            <label for="deadline">截止日期 (YYYY-MM-DD HH:MM:SS):</label>
-            <input type="datetime-local" id="deadline" />
-            <br/><br/>
-            <button onclick="addConference()">添加会议</button>
-        </div>
-        
+        <h1>Robotics-Deadlines - 机器人相关投稿倒计时</h1>
         <div id="conferences" class="conferences-list"></div>
     </div>
 
     <script>
         let conferences = [];
+
+        // 会议分类定义
+        const categories = {
+            'learning-control': {
+                chinese: '学习与控制',
+                english: 'Learning & Control'
+            },
+            'perception-vision': {
+                chinese: '感知与视觉',
+                english: 'Perception & Vision'
+            },
+            'systems-planning': {
+                chinese: '系统与规划',
+                english: 'Systems & Planning'
+            },
+            'human-interaction': {
+                chinese: '人机交互',
+                english: 'Human-Robot Interaction'
+            },
+            'applications': {
+                chinese: '机器人应用',
+                english: 'Applications'
+            }
+        };
 
         // 获取已存储的会议数据
         function loadConferences() {
@@ -35,50 +49,55 @@
                 });
         }
 
-        // 添加新会议
-        function addConference() {
-            const conferenceName = document.getElementById("conference-name").value;
-            const deadline = document.getElementById("deadline").value;
-
-            if (!conferenceName || !deadline) {
-                alert("请输入完整的会议名称和截止日期！");
-                return;
-            }
-
-            const newConference = { name: conferenceName, deadline: deadline };
-
-            // 将新会议发送到后端
-            fetch('/api/conferences', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newConference)
-            })
-            .then(response => response.json())
-            .then(data => {
-                conferences.push(data);
-                displayConferences();
-            });
-        }
-
         // 显示已添加的会议和倒计时
         function displayConferences() {
             const conferencesDiv = document.getElementById("conferences");
             conferencesDiv.innerHTML = "";
 
-            conferences.forEach((conference) => {
-                const conferenceDiv = document.createElement("div");
-                conferenceDiv.classList.add("conference-item");
-
-                conferenceDiv.innerHTML = `
-                    <div class="conference-name">${conference.name}</div>
-                    <div class="conference-details">
-                        <div class="deadline">${conference.deadline}</div>
-                        <div id="countdown-${conference.name}" class="countdown"></div>
-                    </div>
+            // 为每个分类创建一个部分
+            Object.entries(categories).forEach(([categoryId, category]) => {
+                const categoryDiv = document.createElement("div");
+                categoryDiv.classList.add("category-section");
+                categoryDiv.innerHTML = `
+                    <h2>
+                        ${category.chinese}
+                        <span class="english-title">${category.english}</span>
+                    </h2>
                 `;
-                conferencesDiv.appendChild(conferenceDiv);
+                
+                // 获取该分类下的所有会议
+                const categoryConferences = conferences.filter(conf => {
+                    // 根据分类ID映射到原始分类
+                    const categoryMapping = {
+                        'learning-control': ['learning', 'control'],
+                        'perception-vision': ['perception', 'computer-vision'],
+                        'systems-planning': ['systems', 'planning'],
+                        'human-interaction': ['human-interaction'],
+                        'applications': ['applications']
+                    };
+                    return categoryMapping[categoryId].includes(conf.category);
+                });
+                
+                if (categoryConferences.length > 0) {
+                    categoryConferences.forEach((conference) => {
+                        const conferenceDiv = document.createElement("div");
+                        conferenceDiv.classList.add("conference-item");
 
-                startCountdown(conference);
+                        conferenceDiv.innerHTML = `
+                            <div class="conference-name">${conference.name}</div>
+                            <div class="conference-details">
+                                <div class="deadline">${conference.deadline}</div>
+                                <div id="countdown-${conference.name}" class="countdown"></div>
+                            </div>
+                        `;
+                        categoryDiv.appendChild(conferenceDiv);
+                        startCountdown(conference);
+                    });
+                } else {
+                    categoryDiv.innerHTML += '<p class="no-conferences">暂无会议</p>';
+                }
+                
+                conferencesDiv.appendChild(categoryDiv);
             });
         }
 
