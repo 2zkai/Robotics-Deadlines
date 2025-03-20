@@ -1,0 +1,17 @@
+---
+- name: 机器人学
+  sub: ROBO
+- name: 人工智能与机器学习
+  sub: AI
+- name: 计算机视觉
+  sub: CV
+- name: 控制系统
+  sub: CTRL
+- name: 导航与定位
+  sub: NAV
+- name: 自动驾驶
+  sub: AD
+- name: 机器人操作与抓取
+  sub: MANIP
+- name: 人机交互
+  sub: HRI

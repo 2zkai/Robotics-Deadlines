@@ -1,0 +1,28 @@
+- title: ICRA
+  description: IEEE International Conference on Robotics and Automation
+  sub: ROBO
+  rank:
+    ccf: A
+    core: A*
+    thcpl: A
+  dblp: icra
+  confs:
+    - year: 2024
+      id: icra24
+      link: https://2024.ieee-icra.org/
+      timeline:
+        - abstract_deadline: '2023-09-15 23:59:00'
+          deadline: '2023-09-22 23:59:00'
+      timezone: UTC-12
+      date: May 13-17, 2024
+      place: Yokohama, Japan
+    - year: 2025
+      id: icra25
+      link: https://2025.ieee-icra.org/ 
+      timeline:
+        - abstract_deadline: '2024-09-15 23:59:00'
+          deadline: '2024-09-22 23:59:00'
+          comment: 'estimated'
+      timezone: UTC-12
+      date: May, 2025
+      place: TBD 

@@ -1,0 +1,34 @@
+pull_request_rules:
+  - name: say hi on new contribution
+    conditions:
+      - base=main
+      - label!=updateconf
+    actions:
+      comment:
+        message: |
+          Welcome to ccf-deadlines!
+          We're delighted to have you onboard (p≧w≦q)
+      label:
+        add: ['updateconf']
+  - name: ask the maintainer team to review PR
+    conditions:
+      - label!=invalid
+      - "#approved-reviews-by<1"
+    actions:
+      request_reviews:
+        teams:
+          - "maintainers"
+  - name: automatic merge for master when CI passes and 1 reviews
+    conditions:
+      - "#approved-reviews-by>=1"
+      - check-success=build
+      - base=main
+    actions:
+      merge:
+        method: squash
+      label:
+        add: ['ready-to-merge']
+      comment:
+        message: |
+          Great job!
+          Thank you @{{author}} for your contribution!
