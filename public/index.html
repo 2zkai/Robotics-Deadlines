@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotics-Deadlines</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Robotics-Deadlines - 学术会议投稿倒计时</h1>
+        <div class="form-container">
+            <label for="conference-name">会议名称:</label>
+            <input type="text" id="conference-name" placeholder="输入会议名称" />
+            <br/><br/>
+            <label for="deadline">截止日期 (YYYY-MM-DD HH:MM:SS):</label>
+            <input type="datetime-local" id="deadline" />
+            <br/><br/>
+            <button onclick="addConference()">添加会议</button>
+        </div>
+        
+        <div id="conferences" class="conferences-list"></div>
+    </div>
+
+    <script>
+        let conferences = [];
+
+        // 获取已存储的会议数据
+        function loadConferences() {
+            fetch('/api/conferences')
+                .then(response => response.json())
+                .then(data => {
+                    conferences = data;
+                    displayConferences();
+                });
+        }
+
+        // 添加新会议
+        function addConference() {
+            const conferenceName = document.getElementById("conference-name").value;
+            const deadline = document.getElementById("deadline").value;
+
+            if (!conferenceName || !deadline) {
+                alert("请输入完整的会议名称和截止日期！");
+                return;
+            }
+
+            const newConference = { name: conferenceName, deadline: deadline };
+
+            // 将新会议发送到后端
+            fetch('/api/conferences', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newConference)
+            })
+            .then(response => response.json())
+            .then(data => {
+                conferences.push(data);
+                displayConferences();
+            });
+        }
+
+        // 显示已添加的会议和倒计时
+        function displayConferences() {
+            const conferencesDiv = document.getElementById("conferences");
+            conferencesDiv.innerHTML = "";
+
+            conferences.forEach((conference) => {
+                const conferenceDiv = document.createElement("div");
+                conferenceDiv.classList.add("conference-item");
+
+                conferenceDiv.innerHTML = `
+                    <div class="conference-name">${conference.name}</div>
+                    <div class="conference-details">
+                        <div class="deadline">${conference.deadline}</div>
+                        <div id="countdown-${conference.name}" class="countdown"></div>
+                    </div>
+                `;
+                conferencesDiv.appendChild(conferenceDiv);
+
+                startCountdown(conference);
+            });
+        }
+
+        // 启动倒计时
+        function startCountdown(conference) {
+            const countdownElement = document.getElementById(`countdown-${conference.name}`);
+
+            setInterval(function() {
+                const now = new Date().getTime();
+                const distance = new Date(conference.deadline).getTime() - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+
+                if (distance < 0) {
+                    countdownElement.innerHTML = "投稿截止!";
+                }
+            }, 1000);
+        }
+
+        loadConferences();
+    </script>
+</body>
+</html>

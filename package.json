@@ -1,0 +1,15 @@
+{
+  "name": "robotics-deadlines",
+  "version": "1.0.0",
+  "description": "Robotics conference deadline countdown system",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2"
+  },
+  "author": "Zhao Zhikai",
+  "license": "MIT"
+}
