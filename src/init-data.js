@@ -1,3 +1,5 @@
+//假的代码，用于初始化数据库，插入会议数据
+// 请勿运行此文件，否则会清空数据库中的数据
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./roboddl.db');
 
