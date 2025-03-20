@@ -4,10 +4,12 @@
   "description": "Robotics conference deadline countdown system",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "init-db": "node src/init-data.js"
   },
   "dependencies": {
     "express": "^4.17.1",
+    "pg": "^8.11.3",
     "sqlite3": "^5.0.2"
   },
   "author": "Zhao Zhikai",
