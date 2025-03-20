@@ -1,13 +1,7 @@
 //假的代码，用于初始化数据库，插入虚假会议数据
 // 请勿运行此文件，否则会清空数据库中的数据
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://localhost:5432/robotics_deadlines',
-  ssl: process.env.DATABASE_URL ? {
-    rejectUnauthorized: false
-  } : false
-});
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./roboddl.db');
 
 // 会议数据
 const conferences = [
@@ -87,35 +81,63 @@ const conferences = [
     }
 ];
 
-async function initDatabase() {
-  try {
-    // 创建表
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS conferences (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        deadline TIMESTAMP NOT NULL,
-        category VARCHAR(100) NOT NULL
-      )
-    `);
-
-    // 清空现有数据
-    await pool.query('TRUNCATE conferences');
-
-    // 插入新数据
-    for (const conf of conferences) {
-      await pool.query(
-        'INSERT INTO conferences (name, deadline, category) VALUES ($1, $2, $3)',
-        [conf.name, conf.deadline, conf.category]
-      );
-    }
-
-    console.log('数据库初始化成功');
-  } catch (err) {
-    console.error('初始化失败:', err);
-  } finally {
-    await pool.end();
-  }
+// 创建表并插入数据
+function initDatabase() {
+    // 首先创建表
+    db.run(`CREATE TABLE IF NOT EXISTS conferences (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      deadline TEXT NOT NULL,
+      category TEXT NOT NULL
+    )`, (err) => {
+        if (err) {
+            console.error('创建表失败:', err);
+            return;
+        }
+        console.log('会议表创建成功');
+        
+        // 然后插入数据
+        insertConferences();
+    });
 }
 
+// 插入数据
+function insertConferences() {
+    // 首先清空表
+    db.run('DELETE FROM conferences', (err) => {
+        if (err) {
+            console.error('清空表失败:', err);
+            return;
+        }
+        console.log('已清空旧数据');
+        
+        // 然后插入新数据
+        const stmt = db.prepare('INSERT INTO conferences (name, deadline, category) VALUES (?, ?, ?)');
+        
+        conferences.forEach(conf => {
+            stmt.run(conf.name, conf.deadline, conf.category, (err) => {
+                if (err) {
+                    console.error(`Error inserting ${conf.name}:`, err);
+                } else {
+                    console.log(`Successfully inserted ${conf.name}`);
+                }
+            });
+        });
+        
+        stmt.finalize();
+    });
+}
+
+// 执行初始化
 initDatabase();
+
+// 关闭数据库连接
+setTimeout(() => {
+    db.close((err) => {
+        if (err) {
+            console.error('Error closing database:', err);
+        } else {
+            console.log('Database connection closed');
+        }
+    });
+}, 2000); 
