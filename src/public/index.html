@@ -17,6 +17,8 @@
 
     <script>
         let conferences = [];
+        // 存储所有定时器的对象
+        let countdownTimers = {};
 
         // 会议分类定义
         const categories = {
@@ -39,9 +41,22 @@
             fetch('/api/conferences')
                 .then(response => response.json())
                 .then(data => {
+                    // 清除之前的所有定时器
+                    clearAllCountdowns();
                     conferences = data;
                     displayConferences();
+                })
+                .catch(error => {
+                    console.error('获取会议数据错误:', error);
                 });
+        }
+
+        // 清除所有定时器
+        function clearAllCountdowns() {
+            Object.values(countdownTimers).forEach(timer => {
+                clearInterval(timer);
+            });
+            countdownTimers = {};
         }
 
         // 显示已添加的会议和倒计时
@@ -68,11 +83,12 @@
                         const conferenceDiv = document.createElement("div");
                         conferenceDiv.classList.add("conference-item");
 
+                        // 使用会议ID代替名称作为DOM ID的一部分，避免特殊字符问题
                         conferenceDiv.innerHTML = `
                             <div class="conference-name">${conference.name}</div>
                             <div class="conference-details">
-                                <div class="deadline">${conference.deadline}</div>
-                                <div id="countdown-${conference.name}" class="countdown"></div>
+                                <div class="deadline">${formatDate(conference.deadline)}</div>
+                                <div id="countdown-${conference.id}" class="countdown">计算中...</div>
                             </div>
                         `;
                         categoryDiv.appendChild(conferenceDiv);
@@ -86,28 +102,77 @@
             });
         }
 
-        // 启动倒计时
-        function startCountdown(conference) {
-            const countdownElement = document.getElementById(`countdown-${conference.name}`);
-
-            setInterval(function() {
-                const now = new Date().getTime();
-                const distance = new Date(conference.deadline).getTime() - now;
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                countdownElement.innerHTML = `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
-
-                if (distance < 0) {
-                    countdownElement.innerHTML = "投稿截止!";
-                }
-            }, 1000);
+        // 格式化日期显示
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                return dateString; // 如果解析失败，返回原始字符串
+            }
+            
+            return date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
 
-        loadConferences();
+        // 启动倒计时
+        function startCountdown(conference) {
+            // 使用会议ID创建唯一标识符
+            const countdownId = `countdown-${conference.id}`;
+            const countdownElement = document.getElementById(countdownId);
+            
+            if (!countdownElement) {
+                console.error(`找不到倒计时元素: ${countdownId}`);
+                return;
+            }
+            
+            // 清除该会议可能存在的旧定时器
+            if (countdownTimers[countdownId]) {
+                clearInterval(countdownTimers[countdownId]);
+            }
+            
+            // 更新函数
+            const updateCountdown = function() {
+                try {
+                    const now = new Date().getTime();
+                    const deadlineDate = new Date(conference.deadline);
+                    
+                    if (isNaN(deadlineDate.getTime())) {
+                        countdownElement.innerHTML = "日期格式错误";
+                        return;
+                    }
+                    
+                    const distance = deadlineDate.getTime() - now;
+
+                    if (distance < 0) {
+                        countdownElement.innerHTML = "投稿截止!";
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    countdownElement.innerHTML = `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+                } catch (error) {
+                    console.error(`倒计时更新错误: ${error.message}`);
+                    countdownElement.innerHTML = "计算错误";
+                }
+            };
+            
+            // 立即执行一次
+            updateCountdown();
+            
+            // 设置定时器并保存引用
+            countdownTimers[countdownId] = setInterval(updateCountdown, 1000);
+        }
+
+        // 页面加载完成后获取会议数据
+        document.addEventListener('DOMContentLoaded', loadConferences);
     </script>
 </body>
 </html>
