@@ -24,7 +24,7 @@
                 chinese: '机器人强相关',
                 english: 'Strongly Related to Robotics'
             },
-            'moderately-robotics': {
+            'moderate': {
                 chinese: '机器人中等相关',
                 english: 'Moderately Related to Robotics'
             },
@@ -61,15 +61,7 @@
                 `;
                 
                 // 获取该分类下的所有会议
-                const categoryConferences = conferences.filter(conf => {
-                    // 根据分类ID映射到原始分类
-                    const categoryMapping = {
-                        'strongly-robotics': ['systems', 'planning', 'human-interaction', 'applications'],
-                        'moderately-robotics': ['perception', 'computer-vision', 'control'],
-                        'strongly-ai': ['learning']
-                    };
-                    return categoryMapping[categoryId].includes(conf.category);
-                });
+                const categoryConferences = conferences.filter(conf => conf.category === categoryId);
                 
                 if (categoryConferences.length > 0) {
                     categoryConferences.forEach((conference) => {
