@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
     <title>Robotics-Deadlines</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -92,7 +92,9 @@
                             </div>
                         `;
                         categoryDiv.appendChild(conferenceDiv);
-                        startCountdown(conference);
+                        
+                        // 确保DOM元素已添加到页面后再启动倒计时
+                        setTimeout(() => startCountdown(conference), 0);
                     });
                 } else {
                     categoryDiv.innerHTML += '<p class="no-conferences">暂无会议</p>';
@@ -125,7 +127,7 @@
             const countdownElement = document.getElementById(countdownId);
             
             if (!countdownElement) {
-                console.error(`找不到倒计时元素: ${countdownId}`);
+                console.error(`找不到倒计时元素: ${countdownId}, 会议ID: ${conference.id}, 会议名称: ${conference.name}`);
                 return;
             }
             
@@ -142,6 +144,7 @@
                     
                     if (isNaN(deadlineDate.getTime())) {
                         countdownElement.innerHTML = "日期格式错误";
+                        console.error(`日期解析错误: ${conference.deadline}`);
                         return;
                     }
                     
