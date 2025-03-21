@@ -66,7 +66,7 @@ Robotics-Deadlines/
 ## 会议分类
 
 - 与机器人强相关 (Strongly Related to Robotics)
-- 与机器人中等相关 (Moderately Related to Robotics)
+- 交叉领域 (Somewhere Between)
 - 与AI强相关 (Strongly Related to AI)
 
 ## API 接口
