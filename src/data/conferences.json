@@ -14,8 +14,8 @@
   {
     "id": 3,
     "name": "CoRL 2024",
-    "deadline": "2024-06-20T23:59:59",
-    "category": "strongly-ai"
+    "deadline": "2024-04-23T23:59:59",
+    "category": "moderate"
   },
   {
     "id": 4,
@@ -34,5 +34,11 @@
     "name": "HRI 2024",
     "deadline": "2023-10-05T23:59:59",
     "category": "strongly-robotics"
+  },
+  {
+    "id": 7,
+    "name": "ICML 2024",
+    "deadline": "2023-10-05T23:59:59",
+    "category": "strongly-ai"
   }
 ]
