@@ -65,11 +65,9 @@ Robotics-Deadlines/
 
 ## 会议分类
 
-- 学习与控制 (Learning & Control)
-- 感知与视觉 (Perception & Vision)
-- 系统与规划 (Systems & Planning)
-- 人机交互 (Human-Robot Interaction)
-- 机器人应用 (Applications)
+- 与机器人强相关 (Strongly Related to Robotics)
+- 与机器人中等相关 (Moderately Related to Robotics)
+- 与AI强相关 (Strongly Related to AI)
 
 ## API 接口
 

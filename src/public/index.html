@@ -20,25 +20,17 @@
 
         // 会议分类定义
         const categories = {
-            'learning-control': {
-                chinese: '学习与控制',
-                english: 'Learning & Control'
+            'strongly-robotics': {
+                chinese: '与机器人强相关',
+                english: 'Strongly Related to Robotics'
             },
-            'perception-vision': {
-                chinese: '感知与视觉',
-                english: 'Perception & Vision'
+            'moderately-robotics': {
+                chinese: '与机器人中等相关',
+                english: 'Moderately Related to Robotics'
             },
-            'systems-planning': {
-                chinese: '系统与规划',
-                english: 'Systems & Planning'
-            },
-            'human-interaction': {
-                chinese: '人机交互',
-                english: 'Human-Robot Interaction'
-            },
-            'applications': {
-                chinese: '机器人应用',
-                english: 'Applications'
+            'strongly-ai': {
+                chinese: '与AI强相关',
+                english: 'Strongly Related to AI'
             }
         };
 
@@ -72,11 +64,9 @@
                 const categoryConferences = conferences.filter(conf => {
                     // 根据分类ID映射到原始分类
                     const categoryMapping = {
-                        'learning-control': ['learning', 'control'],
-                        'perception-vision': ['perception', 'computer-vision'],
-                        'systems-planning': ['systems', 'planning'],
-                        'human-interaction': ['human-interaction'],
-                        'applications': ['applications']
+                        'strongly-robotics': ['systems', 'planning', 'human-interaction', 'applications'],
+                        'moderately-robotics': ['perception', 'computer-vision', 'control'],
+                        'strongly-ai': ['learning']
                     };
                     return categoryMapping[categoryId].includes(conf.category);
                 });
