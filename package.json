@@ -7,8 +7,7 @@
     "start": "node src/server.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "sqlite3": "^5.0.2"
+    "express": "^4.17.1"
   },
   "author": "Zhao Zhikai",
   "license": "MIT"
