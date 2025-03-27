@@ -10,7 +10,7 @@
     <div class="container">
         <h1>
             <div>机器人投稿倒计时</div>
-            <div>Robotics Deadlines</div>
+            <div>Robotics Deadlines (Full paper submission)</div>
         </h1>
         <div id="conferences" class="conferences-list"></div>
     </div>
@@ -148,7 +148,7 @@
                         return;
                     }
                     
-                    const distance = deadlineDate.getTime() - now;
+                    const distance = deadlineDate.getTime() - now + (20 * 60 * 60 * 1000);
 
                     if (distance < 0) {
                         countdownElement.innerHTML = "投稿截止!";
