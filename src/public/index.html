@@ -77,6 +77,8 @@
         let conferences = [];
         // 存储所有定时器的对象
         let countdownTimers = {};
+        // 设备类型标志
+        let isDesktop = true;
 
         // 会议分类定义
         const categories = {
@@ -157,6 +159,13 @@
                     const questList = document.createElement("ul");
                     questList.classList.add("quest-list");
                     
+                    // 根据设备类型使用不同的布局
+                    if (isDesktop) {
+                        questList.classList.add("desktop-list");
+                    } else {
+                        questList.classList.add("mobile-list");
+                    }
+                    
                     categoryConferences.forEach((conference) => {
                         const questItem = document.createElement("li");
                         questItem.classList.add("quest-item");
@@ -166,19 +175,36 @@
                             ? `<span class="ccf-tag ccf-${conference.ccf.toLowerCase()}" style="background-color: ${ccfColors[conference.ccf] || ccfColors['']}">CCF ${conference.ccf}</span>` 
                             : '';
 
-                        questItem.innerHTML = `
-                            <h3 class="conference-name">
-                                ${conference.name}
-                                ${ccfTag}
-                            </h3>
-                            <p class="conference-description">${conference.description || '无描述'}</p>
-                            <div class="quest-details">
-                                <div class="quest-difficulty">
-                                    <div class="deadline">截稿日期: ${formatDate(conference.deadline)}</div>
+                        // 根据设备类型使用不同的模板
+                        if (isDesktop) {
+                            questItem.innerHTML = `
+                                <h3 class="conference-name">
+                                    ${conference.name}
+                                    ${ccfTag}
+                                </h3>
+                                <p class="conference-description">${conference.description || '无描述'}</p>
+                                <div class="quest-details desktop-details">
+                                    <div class="quest-difficulty">
+                                        <div class="deadline">截稿日期: ${formatDate(conference.deadline)}</div>
+                                    </div>
+                                    <div id="countdown-${conference.id}" class="countdown">计算中...</div>
                                 </div>
-                                <div id="countdown-${conference.id}" class="countdown">计算中...</div>
-                            </div>
-                        `;
+                            `;
+                        } else {
+                            questItem.innerHTML = `
+                                <h3 class="conference-name">
+                                    ${conference.name}
+                                    ${ccfTag}
+                                </h3>
+                                <p class="conference-description">${conference.description || '无描述'}</p>
+                                <div class="quest-details mobile-details">
+                                    <div class="quest-difficulty">
+                                        <div class="deadline">截稿日期: ${formatDate(conference.deadline)}</div>
+                                    </div>
+                                    <div id="countdown-${conference.id}" class="countdown">计算中...</div>
+                                </div>
+                            `;
+                        }
                         questList.appendChild(questItem);
                     });
                     
@@ -368,26 +394,66 @@
 
         // 为所有交互元素添加触摸反馈
         function addTouchFeedback() {
-            document.querySelectorAll('.quest-item, .add-quest-btn, .save-btn, .cancel-btn').forEach(el => {
-                el.addEventListener('touchstart', function() {
-                    this.style.transform = 'scale(0.97)';
+            // 只在移动设备上添加触摸反馈
+            if (!isDesktop) {
+                document.querySelectorAll('.quest-item, .add-quest-btn, .save-btn, .cancel-btn').forEach(el => {
+                    el.addEventListener('touchstart', function() {
+                        this.style.transform = 'scale(0.97)';
+                    });
+                    el.addEventListener('touchend', function() {
+                        this.style.transform = 'scale(1)';
+                    });
                 });
-                el.addEventListener('touchend', function() {
-                    this.style.transform = 'scale(1)';
-                });
-            });
+            }
+        }
+        
+        // 检测设备类型
+        function detectDeviceType() {
+            // 更复杂的设备检测逻辑
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // 检测移动设备
+            if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet|ipad/i.test(userAgent)) {
+                document.body.classList.add('mobile-device');
+                isDesktop = false;
+            } else {
+                document.body.classList.add('desktop-device');
+                isDesktop = true;
+            }
+            
+            // 根据屏幕宽度进一步判断
+            if (window.innerWidth <= 768) {
+                document.body.classList.add('small-screen');
+                isDesktop = false;
+            }
+            
+            console.log(`设备类型: ${isDesktop ? '桌面端' : '移动端'}`);
         }
 
         // 页面加载完成后执行
         document.addEventListener('DOMContentLoaded', function() {
+            // 首先检测设备类型
+            detectDeviceType();
+            
+            // 然后加载会议数据
             loadConferences();
             setupAddConferenceForm();
+            
+            // 只在移动设备上添加触摸反馈
             addTouchFeedback();
             
-            // 检测移动设备并优化界面
-            if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                document.body.classList.add('mobile-device');
-            }
+            // 处理窗口大小变化
+            window.addEventListener('resize', function() {
+                const wasDesktop = isDesktop;
+                
+                // 重新检测设备类型
+                detectDeviceType();
+                
+                // 如果设备类型发生变化，重新加载会议列表
+                if (wasDesktop !== isDesktop) {
+                    loadConferences();
+                }
+            });
         });
     </script>
 </body>
