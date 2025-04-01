@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Robotics-Deadlines</title>
     <link rel="stylesheet" href="style.css">
     <!-- 预加载字体 -->
@@ -19,7 +19,7 @@
             
             <div class="board-header">
                 <h1>※ 机器人投稿任务板 ※</h1>
-                <div class="subtitle">Robotics Deadlines (Full paper submission)</div>
+                <div class="header-subtitle">Robotics Deadlines (Full paper submission)</div>
             </div>
             
             <!-- 添加加载指示器 -->
@@ -28,6 +28,48 @@
             </div>
             
             <div id="conferences" class="conferences-list"></div>
+            
+            <button id="addQuestBtn" class="add-quest-btn">+ 添加会议</button>
+            
+            <div id="questForm" class="quest-form">
+                <div class="form-group">
+                    <label for="questTitle">会议名称:</label>
+                    <input type="text" id="questTitle" placeholder="输入会议名称">
+                </div>
+                <div class="form-group">
+                    <label for="questDescription">会议描述:</label>
+                    <textarea id="questDescription" rows="2" placeholder="输入会议描述"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="questCategory">会议类别:</label>
+                    <select id="questCategory">
+                        <option value="strongly-robotics">机器人强相关任务</option>
+                        <option value="somewhere-between">交叉领域任务</option>
+                        <option value="strongly-ai">AI强相关任务</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="questCCF">CCF等级:</label>
+                    <select id="questCCF">
+                        <option value="A">CCF A</option>
+                        <option value="B">CCF B</option>
+                        <option value="C">CCF C</option>
+                        <option value="">无分级</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="questDeadline">截稿日期:</label>
+                    <input type="date" id="questDeadline">
+                </div>
+                <div class="form-group">
+                    <label for="questTime">截稿时间:</label>
+                    <input type="time" id="questTime" value="23:59">
+                </div>
+                <div class="form-buttons">
+                    <button class="save-btn" id="saveQuest">保存任务</button>
+                    <button class="cancel-btn" id="cancelQuest">取消</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -129,8 +171,11 @@
                                 ${conference.name}
                                 ${ccfTag}
                             </h3>
+                            <p class="conference-description">${conference.description || '无描述'}</p>
                             <div class="quest-details">
-                                <div class="deadline">${formatDate(conference.deadline)}</div>
+                                <div class="quest-difficulty">
+                                    <div class="deadline">截稿日期: ${formatDate(conference.deadline)}</div>
+                                </div>
                                 <div id="countdown-${conference.id}" class="countdown">计算中...</div>
                             </div>
                         `;
@@ -211,7 +256,10 @@
 
                     if (distance < 0) {
                         countdownElement.innerHTML = '<div class="expired-stamp">已过期</div>';
-                        countdownElement.classList.add("expired");
+                        const questItem = countdownElement.closest('.quest-item');
+                        if (questItem) {
+                            questItem.classList.add("expired");
+                        }
                         clearInterval(countdownTimers[countdownId]);
                         delete countdownTimers[countdownId];
                         return;
@@ -236,8 +284,111 @@
             countdownTimers[countdownId] = setInterval(updateCountdown, 1000);
         }
 
-        // 页面加载完成后获取会议数据
-        document.addEventListener('DOMContentLoaded', loadConferences);
+        // 添加新会议功能
+        function setupAddConferenceForm() {
+            const addQuestBtn = document.getElementById('addQuestBtn');
+            const questForm = document.getElementById('questForm');
+            const saveQuestBtn = document.getElementById('saveQuest');
+            const cancelQuestBtn = document.getElementById('cancelQuest');
+            
+            // 显示表单
+            addQuestBtn.addEventListener('click', function() {
+                questForm.classList.add('active');
+                addQuestBtn.style.display = 'none';
+            });
+            
+            // 取消添加
+            cancelQuestBtn.addEventListener('click', function() {
+                questForm.classList.remove('active');
+                addQuestBtn.style.display = 'block';
+                clearForm();
+            });
+            
+            // 保存新会议
+            saveQuestBtn.addEventListener('click', function() {
+                const name = document.getElementById('questTitle').value.trim();
+                const description = document.getElementById('questDescription').value.trim();
+                const category = document.getElementById('questCategory').value;
+                const ccf = document.getElementById('questCCF').value;
+                const deadlineDate = document.getElementById('questDeadline').value;
+                const deadlineTime = document.getElementById('questTime').value;
+                
+                if (name && deadlineDate) {
+                    // 创建ISO格式日期字符串
+                    const deadlineStr = `${deadlineDate}T${deadlineTime}:00`;
+                    
+                    // 创建新会议对象
+                    const newConference = {
+                        name,
+                        description,
+                        category,
+                        ccf,
+                        deadline: deadlineStr
+                    };
+                    
+                    // 发送到服务器
+                    fetch('/api/conferences', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(newConference)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 重新加载会议数据
+                        loadConferences();
+                        questForm.classList.remove('active');
+                        addQuestBtn.style.display = 'block';
+                        clearForm();
+                    })
+                    .catch(error => {
+                        console.error('添加会议错误:', error);
+                        alert('添加会议失败，请重试');
+                    });
+                } else {
+                    alert('请填写必填字段：会议名称和截稿日期');
+                }
+            });
+            
+            // 清空表单
+            function clearForm() {
+                document.getElementById('questTitle').value = '';
+                document.getElementById('questDescription').value = '';
+                document.getElementById('questCategory').selectedIndex = 0;
+                document.getElementById('questCCF').selectedIndex = 0;
+                document.getElementById('questDeadline').value = '';
+                document.getElementById('questTime').value = '23:59';
+            }
+            
+            // 设置日期选择器的最小日期为今天
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('questDeadline').min = today;
+        }
+
+        // 为所有交互元素添加触摸反馈
+        function addTouchFeedback() {
+            document.querySelectorAll('.quest-item, .add-quest-btn, .save-btn, .cancel-btn').forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.97)';
+                });
+                el.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConferences();
+            setupAddConferenceForm();
+            addTouchFeedback();
+            
+            // 检测移动设备并优化界面
+            if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                document.body.classList.add('mobile-device');
+            }
+        });
     </script>
 </body>
 </html>

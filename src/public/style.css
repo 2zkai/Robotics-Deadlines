@@ -154,11 +154,18 @@ body {
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 10px;
+    position: relative;
+}
+
+.quest-difficulty {
+    display: flex;
+    align-items: center;
 }
 
 .deadline {
     color: #e8e0c9;
     font-size: 0.9em;
+    margin-right: auto;
 }
 
 .countdown {
@@ -192,6 +199,23 @@ body {
     border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='6' height='6'><path d='M1,1 L5,1 L5,5 L1,5 L1,1' fill='transparent' stroke='%232a2a2a' stroke-width='2'/></svg>") 2 repeat;
 }
 
+/* 会议级别标签改进 */
+.conference-rank {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    color: #1f1f1f;
+    font-weight: bold;
+    text-shadow: none;
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.2), 0 2px 0 rgba(0, 0, 0, 0.3);
+    position: relative;
+    letter-spacing: 1px;
+    /* 像素风边框 */
+    border: 2px solid #2a2a2a;
+    border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='6' height='6'><path d='M1,1 L5,1 L5,5 L1,5 L1,1' fill='transparent' stroke='%232a2a2a' stroke-width='2'/></svg>") 2 repeat;
+}
+
 /* CCF 标签特定样式 */
 .ccf-a {
     background-color: #ffd866; /* 金色 */
@@ -203,6 +227,14 @@ body {
 
 .ccf-c {
     background-color: #fc9867; /* 橙色 */
+}
+
+/* 会议描述样式 */
+.conference-description {
+    color: #e8e0c9;
+    margin: 5px 0 10px 0;
+    font-size: 16px;
+    line-height: 1.4;
 }
 
 /* 暂无会议提示样式 */
@@ -338,6 +370,13 @@ body {
     border-radius: 50%;
 }
 
+/* 整个过期条目的视觉效果 */
+.quest-item.expired {
+    opacity: 0.85;
+    position: relative;
+    overflow: hidden;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .container {
@@ -351,6 +390,16 @@ body {
     .quest-details {
         flex-direction: column;
         align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .conference-description {
+        font-size: 14px;
+        margin: 4px 0 8px 0;
+    }
+    
+    .deadline {
+        margin-right: 0;
     }
     
     .board-header h1 {
@@ -437,6 +486,11 @@ body {
     /* 单列布局确保可读性 */
     .quest-details {
         gap: 8px;
+    }
+    
+    .conference-description {
+        font-size: 14px;
+        margin: 4px 0 8px 0;
     }
     
     /* 优化板钉在小屏幕设备上的位置 */
