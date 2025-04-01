@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robotics-Deadlines</title>
     <link rel="stylesheet" href="style.css">
+    <!-- 预加载字体 -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=VT323&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -18,6 +20,11 @@
             <div class="board-header">
                 <h1>※ 机器人投稿任务板 ※</h1>
                 <div class="subtitle">Robotics Deadlines (Full paper submission)</div>
+            </div>
+            
+            <!-- 添加加载指示器 -->
+            <div id="loading-indicator" class="loading-indicator">
+                <div class="loading-text">正在加载任务列表...</div>
             </div>
             
             <div id="conferences" class="conferences-list"></div>
@@ -47,32 +54,41 @@
 
         // 获取已存储的会议数据
         function loadConferences() {
+            // 显示加载指示器
+            const loadingIndicator = document.getElementById('loading-indicator');
+            loadingIndicator.style.display = 'flex';
+            
             fetch('/api/conferences')
                 .then(response => response.json())
                 .then(data => {
                     // 清除之前的所有定时器
                     clearAllCountdowns();
                     conferences = data;
-                    displayConferences();
+                    
+                    // 构建完整的DOM结构
+                    const fragment = buildConferencesDom(conferences);
+                    
+                    // 一次性更新DOM
+                    const conferencesDiv = document.getElementById("conferences");
+                    conferencesDiv.innerHTML = "";
+                    conferencesDiv.appendChild(fragment);
+                    
+                    // 隐藏加载指示器
+                    loadingIndicator.style.display = 'none';
+                    
+                    // 启动所有倒计时
+                    startAllCountdowns();
                 })
                 .catch(error => {
                     console.error('获取会议数据错误:', error);
+                    loadingIndicator.innerHTML = '<div class="error-message">加载失败，请刷新页面重试</div>';
                 });
         }
-
-        // 清除所有定时器
-        function clearAllCountdowns() {
-            Object.values(countdownTimers).forEach(timer => {
-                clearInterval(timer);
-            });
-            countdownTimers = {};
-        }
-
-        // 显示已添加的会议和倒计时
-        function displayConferences() {
-            const conferencesDiv = document.getElementById("conferences");
-            conferencesDiv.innerHTML = "";
-
+        
+        // 构建会议DOM结构（不直接添加到页面）
+        function buildConferencesDom(conferencesData) {
+            const fragment = document.createDocumentFragment();
+            
             // 为每个分类创建一个部分
             Object.entries(categories).forEach(([categoryId, category]) => {
                 const categoryDiv = document.createElement("div");
@@ -85,7 +101,7 @@
                 `;
                 
                 // 获取该分类下的所有会议
-                const categoryConferences = conferences.filter(conf => conf.category === categoryId);
+                const categoryConferences = conferencesData.filter(conf => conf.category === categoryId);
                 
                 if (categoryConferences.length > 0) {
                     const questList = document.createElement("ul");
@@ -95,7 +111,6 @@
                         const questItem = document.createElement("li");
                         questItem.classList.add("quest-item");
 
-                        // 使用会议ID代替名称作为DOM ID的一部分，避免特殊字符问题
                         questItem.innerHTML = `
                             <h3 class="conference-name">${conference.name}</h3>
                             <p>此任务需要在截止日期前完成提交，请合理安排时间。</p>
@@ -105,9 +120,6 @@
                             </div>
                         `;
                         questList.appendChild(questItem);
-                        
-                        // 确保DOM元素已添加到页面后再启动倒计时
-                        setTimeout(() => startCountdown(conference), 0);
                     });
                     
                     categoryDiv.appendChild(questList);
@@ -115,8 +127,25 @@
                     categoryDiv.innerHTML += '<p class="no-conferences">暂无任务</p>';
                 }
                 
-                conferencesDiv.appendChild(categoryDiv);
+                fragment.appendChild(categoryDiv);
             });
+            
+            return fragment;
+        }
+        
+        // 启动所有倒计时（DOM已完全构建后）
+        function startAllCountdowns() {
+            conferences.forEach(conference => {
+                startCountdown(conference);
+            });
+        }
+
+        // 清除所有定时器
+        function clearAllCountdowns() {
+            Object.values(countdownTimers).forEach(timer => {
+                clearInterval(timer);
+            });
+            countdownTimers = {};
         }
 
         // 格式化日期显示
@@ -166,8 +195,10 @@
                     const distance = deadlineDate.getTime() - now + (20 * 60 * 60 * 1000);
 
                     if (distance < 0) {
-                        countdownElement.innerHTML = "任务已过期！";
+                        countdownElement.innerHTML = '<div class="expired-stamp">已过期</div>';
                         countdownElement.classList.add("expired");
+                        clearInterval(countdownTimers[countdownId]);
+                        delete countdownTimers[countdownId];
                         return;
                     }
 

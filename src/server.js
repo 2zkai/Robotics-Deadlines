@@ -41,7 +41,7 @@ app.get('/api/conferences', (req, res) => {
 
 // 添加新会议
 app.post('/api/conferences', (req, res) => {
-  const { name, deadline, category } = req.body;
+  const { name, deadline, category } = req.body; // 移除 ccf 属性
   const conferences = readConferences();
   
   // 生成新ID
