@@ -3,48 +3,56 @@
     "id": 1,
     "name": "ICRA 2024",
     "deadline": "2023-09-15T23:59:59",
-    "category": "strongly-robotics"
+    "category": "strongly-robotics",
+    "ccf": "A"
   },
   {
     "id": 2,
     "name": "IROS 2024",
     "deadline": "2024-03-01T23:59:59",
-    "category": "strongly-robotics"
+    "category": "strongly-robotics",
+    "ccf": "B"
   },
   {
     "id": 3,
     "name": "CoRL 2025",
     "deadline": "2025-04-30T23:59:59",
-    "category": "somewhere-between"
+    "category": "somewhere-between",
+    "ccf": "C"
   },
   {
     "id": 4,
     "name": "RSS 2024",
     "deadline": "2024-01-31T23:59:59",
-    "category": "strongly-robotics"
+    "category": "strongly-robotics",
+    "ccf": "A"
   },
   {
     "id": 5,
     "name": "CVPR 2024",
     "deadline": "2023-11-10T23:59:59",
-    "category": "somewhere-between"
+    "category": "somewhere-between",
+    "ccf": "A"
   },
   {
     "id": 6,
     "name": "HRI 2024",
     "deadline": "2023-10-05T23:59:59",
-    "category": "strongly-robotics"
+    "category": "strongly-robotics",
+    "ccf": "B"
   },
   {
     "id": 7,
     "name": "NeurIPS 2025",
     "deadline": "2025-05-15T23:59:59",
-    "category": "strongly-ai"
+    "category": "strongly-ai",
+    "ccf": "A"
   },
   {
     "id": 8,
     "name": "ICML 2025",
     "deadline": "2025-01-26T23:59:59",
-    "category": "strongly-ai"
+    "category": "strongly-ai",
+    "ccf": "A"
   }
 ]
