@@ -373,4 +373,111 @@ body {
         align-items: flex-start;
         gap: 5px;
     }
+    
+    /* 增加触摸区域 */
+    .quest-item {
+        padding: 16px;
+        margin: 12px 0;
+        min-height: 100px; /* 确保足够的触摸区域高度 */
+    }
+    
+    /* 优化倒计时在移动端的显示 */
+    .countdown {
+        font-size: 1.2em;
+        padding: 5px 0;
+    }
+    
+    /* 优化过期印章在移动端的大小 */
+    .expired-stamp {
+        width: 70px;
+        height: 70px;
+        font-size: 16px;
+    }
+}
+
+/* 添加更小尺寸移动设备的媒体查询 */
+@media (max-width: 480px) {
+    body {
+        font-size: 16px;
+        padding: 10px;
+    }
+    
+    .container {
+        padding: 5px;
+    }
+    
+    .quest-board {
+        padding: 10px;
+        margin-top: 40px;
+    }
+    
+    .board-header h1 {
+        font-size: 20px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+    
+    .conference-name {
+        font-size: 20px;
+    }
+    
+    .category-section {
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+    
+    /* 单列布局确保可读性 */
+    .quest-details {
+        gap: 8px;
+    }
+    
+    /* 优化板钉在小屏幕设备上的位置 */
+    .nail-1, .nail-2, .nail-3, .nail-4 {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* 添加横屏模式的优化 */
+@media (max-width: 896px) and (orientation: landscape) {
+    .container {
+        max-width: 100%;
+    }
+    
+    .quest-board {
+        margin-top: 20px;
+    }
+    
+    /* 横屏模式下使列表更紧凑 */
+    .category-section {
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .quest-item {
+        padding: 8px 12px;
+        margin: 6px 0;
+    }
+}
+
+/* 添加支持触控的交互样式 */
+@media (hover: none) {
+    .quest-item:hover {
+        transform: none; /* 移除悬停效果，避免触摸设备上的闪烁 */
+    }
+    
+    /* 添加活跃状态反馈 */
+    .quest-item:active {
+        background-color: #4a3f2e;
+        transform: translateX(2px);
+    }
+}
+
+/* 优化字体加载和显示 */
+@media screen and (max-width: 768px) {
+    * {
+        text-rendering: optimizeSpeed; /* 优化文本渲染速度 */
+    }
 }
