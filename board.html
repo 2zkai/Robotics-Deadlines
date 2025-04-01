@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>像素风中世纪任务板</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        /* 全局像素风格设置 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            image-rendering: pixelated;
+            font-family: 'VT323', monospace;
+        }
+        
+        body {
+            background-color: #3f3851;
+            color: #e8e0c9;
+            font-size: 18px;
+            line-height: 1.5;
+            padding: 20px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVQImWNgYGD4z0AswK4SAFXuAf4ETD4VAAAAAElFTkSuQmCC');
+            background-repeat: repeat;
+            image-rendering: pixelated;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 像素边框设计 */
+        .pixel-border {
+            border-style: solid;
+            border-width: 4px;
+            border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><path d='M2,2 L10,2 L10,10 L2,10 L2,2' fill='transparent' stroke='%23856c4d' stroke-width='4'/></svg>") 4 repeat;
+            border-image-outset: 2px;
+            background-color: #64523c;
+            box-shadow: 0 4px 0 #2e2415;
+        }
+        
+        /* 任务板样式 */
+        .quest-board {
+            padding: 16px;
+            position: relative;
+            margin-top: 60px;
+        }
+        
+        .board-header {
+            background-color: #493724;
+            text-align: center;
+            padding: 12px;
+            margin: -32px -16px 16px -16px;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .board-header h1 {
+            font-size: 32px;
+            color: #ffd866;
+            text-shadow: 2px 2px 0 #000;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+        
+        /* 任务列表样式 */
+        .quest-list {
+            list-style-type: none;
+        }
+        
+        .quest-item {
+            padding: 12px;
+            margin-bottom: 16px;
+            background-color: #55483b;
+            border-left: 8px solid #ffd866;
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .quest-item:hover {
+            transform: translateX(4px);
+            background-color: #6a563f;
+        }
+        
+        .quest-item h3 {
+            font-size: 24px;
+            color: #ffd866;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 0 #000;
+        }
+        
+        .quest-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+        }
+        
+        .quest-difficulty {
+            display: flex;
+            align-items: center;
+        }
+        
+        .difficulty-star {
+            color: #ffd866;
+            font-size: 16px;
+            margin-left: 2px;
+        }
+        
+        .quest-reward {
+            color: #ffd866;
+        }
+        
+        /* 添加任务按钮 */
+        .add-quest-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4a3f2e;
+            color: #ffd866;
+            border: none;
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 24px;
+            box-shadow: 0 4px 0 #2e2415;
+            transition: all 0.2s ease;
+        }
+        
+        .add-quest-btn:hover {
+            background-color: #5e4e37;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #2e2415;
+        }
+        
+        .add-quest-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #2e2415;
+        }
+        
+        /* 装饰元素 */
+        .decorative-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #ffd866;
+            display: inline-block;
+            margin: 0 8px;
+        }
+        
+        .board-nails {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #b2967d;
+            border: 2px solid #6a563f;
+            border-radius: 50%;
+        }
+        
+        .nail-1 { top: 10px; left: 10px; }
+        .nail-2 { top: 10px; right: 10px; }
+        .nail-3 { bottom: 10px; left: 10px; }
+        .nail-4 { bottom: 10px; right: 10px; }
+        
+        /* 任务表单 */
+        .quest-form {
+            display: none;
+            background-color: #55483b;
+            padding: 16px;
+            margin-top: 16px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .quest-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            color: #ffd866;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            background-color: #3f3440;
+            border: 2px solid #6a563f;
+            color: #e8e0c9;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+        
+        .form-buttons button {
+            padding: 8px 16px;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .save-btn {
+            background-color: #4d7239;
+            color: #e8e0c9;
+        }
+        
+        .cancel-btn {
+            background-color: #863a38;
+            color: #e8e0c9;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .board-header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="quest-board pixel-border">
+            <div class="board-nails nail-1"></div>
+            <div class="board-nails nail-2"></div>
+            <div class="board-nails nail-3"></div>
+            <div class="board-nails nail-4"></div>
+            
+            <div class="board-header">
+                <h1>※ 冒险者公会任务板 ※</h1>
+            </div>
+            
+            <ul class="quest-list" id="questList">
+                <li class="quest-item">
+                    <h3>讨伐森林中的哥布林</h3>
+                    <p>森林中的哥布林日益猖獗，需要勇敢的冒险者前去剿灭。</p>
+                    <div class="quest-details">
+                        <div class="quest-difficulty">
+                            难度: 
+                            <span class="difficulty-star">★</span>
+                            <span class="difficulty-star">★</span>
+                        </div>
+                        <div class="quest-reward">报酬: 50 金币</div>
+                    </div>
+                </li>
+                <li class="quest-item">
+                    <h3>寻找失落的圣物</h3>
+                    <p>传说中的圣杯被藏在古老的地下城中，急需一位勇敢的冒险者前去寻找。</p>
+                    <div class="quest-details">
+                        <div class="quest-difficulty">
+                            难度: 
+                            <span class="difficulty-star">★</span>
+                            <span class="difficulty-star">★</span>
+                            <span class="difficulty-star">★</span>
+                            <span class="difficulty-star">★</span>
+                        </div>
+                        <div class="quest-reward">报酬: 200 金币</div>
+                    </div>
+                </li>
+                <li class="quest-item">
+                    <h3>护送商队穿越荒原</h3>
+                    <p>一支商队需要穿越危险的荒原，需要保镖护送确保安全。</p>
+                    <div class="quest-details">
+                        <div class="quest-difficulty">
+                            难度: 
+                            <span class="difficulty-star">★</span>
+                            <span class="difficulty-star">★</span>
+                            <span class="difficulty-star">★</span>
+                        </div>
+                        <div class="quest-reward">报酬: 120 金币</div>
+                    </div>
+                </li>
+            </ul>
+            
+            <div class="quest-form" id="questForm">
+                <div class="form-group">
+                    <label for="questTitle">任务名称:</label>
+                    <input type="text" id="questTitle" placeholder="输入任务名称">
+                </div>
+                <div class="form-group">
+                    <label for="questDescription">任务描述:</label>
+                    <textarea id="questDescription" rows="3" placeholder="输入任务描述"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="questDifficulty">难度:</label>
+                    <select id="questDifficulty">
+                        <option value="1">★</option>
+                        <option value="2">★★</option>
+                        <option value="3">★★★</option>
+                        <option value="4">★★★★</option>
+                        <option value="5">★★★★★</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="questReward">报酬 (金币):</label>
+                    <input type="number" id="questReward" min="1" placeholder="输入金币数量">
+                </div>
+                <div class="form-buttons">
+                    <button class="save-btn" id="saveQuest">保存任务</button>
+                    <button class="cancel-btn" id="cancelQuest">取消</button>
+                </div>
+            </div>
+            
+            <button class="add-quest-btn" id="addQuestBtn">+ 发布新任务</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addQuestBtn = document.getElementById('addQuestBtn');
+            const questForm = document.getElementById('questForm');
+            const saveQuestBtn = document.getElementById('saveQuest');
+            const cancelQuestBtn = document.getElementById('cancelQuest');
+            const questList = document.getElementById('questList');
+            
+            // 显示任务表单
+            addQuestBtn.addEventListener('click', function() {
+                questForm.classList.add('active');
+                addQuestBtn.style.display = 'none';
+            });
+            
+            // 取消添加任务
+            cancelQuestBtn.addEventListener('click', function() {
+                questForm.classList.remove('active');
+                addQuestBtn.style.display = 'block';
+                clearForm();
+            });
+            
+            // 保存新任务
+            saveQuestBtn.addEventListener('click', function() {
+                const title = document.getElementById('questTitle').value;
+                const description = document.getElementById('questDescription').value;
+                const difficulty = parseInt(document.getElementById('questDifficulty').value);
+                const reward = document.getElementById('questReward').value;
+                
+                if (title && description && reward) {
+                    addNewQuest(title, description, difficulty, reward);
+                    questForm.classList.remove('active');
+                    addQuestBtn.style.display = 'block';
+                    clearForm();
+                } else {
+                    alert('请填写所有必填字段！');
+                }
+            });
+            
+            // 添加新任务到列表
+            function addNewQuest(title, description, difficulty, reward) {
+                const questItem = document.createElement('li');
+                questItem.className = 'quest-item';
+                
+                let stars = '';
+                for (let i = 0; i < difficulty; i++) {
+                    stars += '<span class="difficulty-star">★</span>';
+                }
+                
+                questItem.innerHTML = `
+                    <h3>${title}</h3>
+                    <p>${description}</p>
+                    <div class="quest-details">
+                        <div class="quest-difficulty">
+                            难度: ${stars}
+                        </div>
+                        <div class="quest-reward">报酬: ${reward} 金币</div>
+                    </div>
+                `;
+                
+                // 添加点击效果
+                questItem.addEventListener('click', function() {
+                    questItem.style.textDecoration = questItem.style.textDecoration === 'line-through' ? 'none' : 'line-through';
+                });
+                
+                questList.prepend(questItem);
+            }
+            
+            // 清空表单
+            function clearForm() {
+                document.getElementById('questTitle').value = '';
+                document.getElementById('questDescription').value = '';
+                document.getElementById('questDifficulty').value = '1';
+                document.getElementById('questReward').value = '';
+            }
+            
+            // 为已有的任务项添加点击效果
+            const existingQuests = document.querySelectorAll('.quest-item');
+            existingQuests.forEach(quest => {
+                quest.addEventListener('click', function() {
+                    quest.style.textDecoration = quest.style.textDecoration === 'line-through' ? 'none' : 'line-through';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

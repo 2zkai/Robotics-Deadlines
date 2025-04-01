@@ -2,17 +2,26 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robotics-Deadlines</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>
-            <div>机器人投稿倒计时</div>
-            <div>Robotics Deadlines (Full paper submission)</div>
-        </h1>
-        <div id="conferences" class="conferences-list"></div>
+        <div class="quest-board pixel-border">
+            <div class="board-nails nail-1"></div>
+            <div class="board-nails nail-2"></div>
+            <div class="board-nails nail-3"></div>
+            <div class="board-nails nail-4"></div>
+            
+            <div class="board-header">
+                <h1>※ 机器人投稿任务板 ※</h1>
+                <div class="subtitle">Robotics Deadlines (Full paper submission)</div>
+            </div>
+            
+            <div id="conferences" class="conferences-list"></div>
+        </div>
     </div>
 
     <script>
@@ -23,15 +32,15 @@
         // 会议分类定义
         const categories = {
             'strongly-robotics': {
-                chinese: '机器人强相关',
+                chinese: '机器人强相关任务',
                 english: 'Strongly Related to Robotics'
             },
             'somewhere-between': {
-                chinese: '交叉领域',
+                chinese: '交叉领域任务',
                 english: 'Somewhere Between'
             },
             'strongly-ai': {
-                chinese: 'AI强相关',
+                chinese: 'AI强相关任务',
                 english: 'Strongly Related to AI'
             }
         };
@@ -79,25 +88,31 @@
                 const categoryConferences = conferences.filter(conf => conf.category === categoryId);
                 
                 if (categoryConferences.length > 0) {
+                    const questList = document.createElement("ul");
+                    questList.classList.add("quest-list");
+                    
                     categoryConferences.forEach((conference) => {
-                        const conferenceDiv = document.createElement("div");
-                        conferenceDiv.classList.add("conference-item");
+                        const questItem = document.createElement("li");
+                        questItem.classList.add("quest-item");
 
                         // 使用会议ID代替名称作为DOM ID的一部分，避免特殊字符问题
-                        conferenceDiv.innerHTML = `
-                            <div class="conference-name">${conference.name}</div>
-                            <div class="conference-details">
+                        questItem.innerHTML = `
+                            <h3 class="conference-name">${conference.name}</h3>
+                            <p>此任务需要在截止日期前完成提交，请合理安排时间。</p>
+                            <div class="quest-details">
                                 <div class="deadline">${formatDate(conference.deadline)}</div>
                                 <div id="countdown-${conference.id}" class="countdown">计算中...</div>
                             </div>
                         `;
-                        categoryDiv.appendChild(conferenceDiv);
+                        questList.appendChild(questItem);
                         
                         // 确保DOM元素已添加到页面后再启动倒计时
                         setTimeout(() => startCountdown(conference), 0);
                     });
+                    
+                    categoryDiv.appendChild(questList);
                 } else {
-                    categoryDiv.innerHTML += '<p class="no-conferences">暂无会议</p>';
+                    categoryDiv.innerHTML += '<p class="no-conferences">暂无任务</p>';
                 }
                 
                 conferencesDiv.appendChild(categoryDiv);
@@ -151,7 +166,8 @@
                     const distance = deadlineDate.getTime() - now + (20 * 60 * 60 * 1000);
 
                     if (distance < 0) {
-                        countdownElement.innerHTML = "投稿截止!";
+                        countdownElement.innerHTML = "任务已过期！";
+                        countdownElement.classList.add("expired");
                         return;
                     }
 
@@ -160,7 +176,7 @@
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                    countdownElement.innerHTML = `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+                    countdownElement.innerHTML = `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
                 } catch (error) {
                     console.error(`倒计时更新错误: ${error.message}`);
                     countdownElement.innerHTML = "计算错误";
