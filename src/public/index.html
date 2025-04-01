@@ -281,11 +281,18 @@
                     const distance = deadlineDate.getTime() - now + (20 * 60 * 60 * 1000);
 
                     if (distance < 0) {
-                        countdownElement.innerHTML = '<div class="expired-stamp">已过期</div>';
-                        const questItem = countdownElement.closest('.quest-item');
-                        if (questItem) {
-                            questItem.classList.add("expired");
+                        // 根据设备类型使用不同的过期标记
+                        if (isDesktop) {
+                            countdownElement.innerHTML = '<div class="expired-stamp">已过期</div>';
+                        } else {
+                            countdownElement.innerHTML = '<div class="expired-stamp">已过期</div>';
+                            // 给整个任务项添加过期类
+                            const questItem = countdownElement.closest('.quest-item');
+                            if (questItem) {
+                                questItem.classList.add("expired");
+                            }
                         }
+                        
                         clearInterval(countdownTimers[countdownId]);
                         delete countdownTimers[countdownId];
                         return;
@@ -392,25 +399,43 @@
             document.getElementById('questDeadline').min = today;
         }
 
-        // 为所有交互元素添加触摸反馈
+        // 为所有交互元素添加触摸反馈 (增强版)
         function addTouchFeedback() {
             // 只在移动设备上添加触摸反馈
             if (!isDesktop) {
-                document.querySelectorAll('.quest-item, .add-quest-btn, .save-btn, .cancel-btn').forEach(el => {
-                    el.addEventListener('touchstart', function() {
-                        this.style.transform = 'scale(0.97)';
-                    });
-                    el.addEventListener('touchend', function() {
-                        this.style.transform = 'scale(1)';
-                    });
+                const touchElements = document.querySelectorAll('.quest-item, .add-quest-btn, .save-btn, .cancel-btn');
+                
+                touchElements.forEach(el => {
+                    // 移除可能存在的旧事件监听器
+                    el.removeEventListener('touchstart', handleTouchStart);
+                    el.removeEventListener('touchend', handleTouchEnd);
+                    
+                    // 添加新的事件监听器
+                    el.addEventListener('touchstart', handleTouchStart);
+                    el.addEventListener('touchend', handleTouchEnd);
                 });
             }
         }
         
-        // 检测设备类型
+        // 触摸事件处理函数
+        function handleTouchStart() {
+            this.style.transform = 'scale(0.97)';
+            this.style.opacity = '0.9';
+            this.style.transition = 'transform 0.1s ease, opacity 0.1s ease';
+        }
+        
+        function handleTouchEnd() {
+            this.style.transform = 'scale(1)';
+            this.style.opacity = '1';
+        }
+
+        // 检测设备类型的函数增强
         function detectDeviceType() {
             // 更复杂的设备检测逻辑
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // 清除之前可能存在的类
+            document.body.classList.remove('mobile-device', 'desktop-device', 'small-screen');
             
             // 检测移动设备
             if (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet|ipad/i.test(userAgent)) {
@@ -425,6 +450,8 @@
             if (window.innerWidth <= 768) {
                 document.body.classList.add('small-screen');
                 isDesktop = false;
+                document.body.classList.add('mobile-device');
+                document.body.classList.remove('desktop-device');
             }
             
             console.log(`设备类型: ${isDesktop ? '桌面端' : '移动端'}`);
