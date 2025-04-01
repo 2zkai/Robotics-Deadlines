@@ -354,11 +354,11 @@ body {
     }
     
     .board-header h1 {
-        font-size: 24px;
+        font-size: 22px;
     }
     
     .category-section h2 {
-        font-size: 1.5em;
+        font-size: 1.3em;
     }
     
     /* 小屏幕下CCF标签样式调整 */
@@ -372,6 +372,7 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 5px;
+        font-size: 20px;
     }
     
     /* 增加触摸区域 */
@@ -389,9 +390,10 @@ body {
     
     /* 优化过期印章在移动端的大小 */
     .expired-stamp {
-        width: 70px;
-        height: 70px;
-        font-size: 16px;
+        width: 60px;
+        height: 60px;
+        font-size: 14px;
+        border: 3px solid #ff4444;
     }
 }
 
@@ -412,20 +414,24 @@ body {
     }
     
     .board-header h1 {
-        font-size: 20px;
+        font-size: 18px;
     }
     
     .subtitle {
-        font-size: 14px;
+        font-size: 12px;
     }
     
     .conference-name {
-        font-size: 20px;
+        font-size: 18px;
     }
     
     .category-section {
         padding: 12px;
         margin-bottom: 20px;
+    }
+    
+    .category-section h2 {
+        font-size: 1.1em;
     }
     
     /* 单列布局确保可读性 */
@@ -437,6 +443,27 @@ body {
     .nail-1, .nail-2, .nail-3, .nail-4 {
         width: 8px;
         height: 8px;
+    }
+    
+    /* 进一步减小过期印章尺寸 */
+    .expired-stamp {
+        width: 50px;
+        height: 50px;
+        font-size: 12px;
+        border: 2px solid #ff4444;
+    }
+    
+    .expired-stamp::before {
+        top: 3px;
+        left: 3px;
+        right: 3px;
+        bottom: 3px;
+        border: 1px dashed #fff;
+    }
+    
+    /* 减小倒计时字体大小 */
+    .countdown {
+        font-size: 1em;
     }
 }
 
