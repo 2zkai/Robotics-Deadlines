@@ -31,12 +31,45 @@
         </div>
     </div>
 
+    <!-- 会议详情模态框 -->
+    <div id="conference-modal" class="modal">
+        <div class="modal-content pixel-border">
+            <div class="board-nails modal-nail-1"></div>
+            <div class="board-nails modal-nail-2"></div>
+            <div class="board-nails modal-nail-3"></div>
+            <div class="board-nails modal-nail-4"></div>
+            
+            <div class="modal-header">
+                <h2 id="modal-title">会议详情</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div id="modal-ccf" class="modal-ccf"></div>
+                <div class="modal-section">
+                    <h3 class="modal-section-title">描述</h3>
+                    <p id="modal-description" class="modal-section-content"></p>
+                </div>
+                <div class="modal-section">
+                    <h3 class="modal-section-title">截稿日期</h3>
+                    <p id="modal-deadline" class="modal-section-content"></p>
+                </div>
+                <div class="modal-section">
+                    <h3 class="modal-section-title">倒计时</h3>
+                    <div id="modal-countdown" class="modal-section-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         let conferences = [];
         // 存储所有定时器的对象
         let countdownTimers = {};
         // 设备类型标志
         let isDesktop = true;
+        // 存储当前选中的会议
+        let selectedConference = null;
 
         // 会议分类定义
         const categories = {
@@ -127,6 +160,7 @@
                     categoryConferences.forEach((conference) => {
                         const questItem = document.createElement("li");
                         questItem.classList.add("quest-item");
+                        questItem.dataset.id = conference.id; // 设置数据属性以便点击时识别会议
                         
                         // 创建CCF标签HTML
                         const ccfTag = conference.ccf 
@@ -163,6 +197,12 @@
                                 </div>
                             `;
                         }
+                        
+                        // 添加点击事件，打开模态框
+                        questItem.addEventListener('click', function() {
+                            openConferenceModal(conference);
+                        });
+                        
                         questList.appendChild(questItem);
                     });
                     
@@ -177,6 +217,77 @@
             return fragment;
         }
         
+        // 打开会议详情模态框
+        function openConferenceModal(conference) {
+            // 设置当前选中的会议
+            selectedConference = conference;
+            
+            // 填充模态框内容
+            document.getElementById('modal-title').textContent = conference.name;
+            document.getElementById('modal-description').textContent = conference.description || '无描述';
+            document.getElementById('modal-deadline').textContent = formatDate(conference.deadline);
+            
+            // 设置CCF标签
+            const modalCcf = document.getElementById('modal-ccf');
+            if (conference.ccf) {
+                modalCcf.innerHTML = `<span class="ccf-tag ccf-${conference.ccf.toLowerCase()}" style="background-color: ${ccfColors[conference.ccf]}">CCF ${conference.ccf}</span>`;
+                modalCcf.style.display = 'block';
+            } else {
+                modalCcf.style.display = 'none';
+            }
+            
+            // 更新倒计时
+            updateModalCountdown();
+            
+            // 显示模态框
+            document.getElementById('conference-modal').classList.add('show');
+            
+            // 添加点击事件以关闭模态框
+            document.querySelector('.modal-close').addEventListener('click', closeConferenceModal);
+            
+            // 启动倒计时定时器
+            modalCountdownTimer = setInterval(updateModalCountdown, 1000);
+        }
+        
+        // 更新模态框内的倒计时
+        function updateModalCountdown() {
+            if (!selectedConference) return;
+            
+            try {
+                const now = new Date().getTime();
+                const deadlineDate = new Date(selectedConference.deadline);
+                
+                if (isNaN(deadlineDate.getTime())) {
+                    document.getElementById('modal-countdown').innerHTML = "日期格式错误";
+                    return;
+                }
+                
+                const distance = deadlineDate.getTime() - now + (20 * 60 * 60 * 1000);
+
+                if (distance < 0) {
+                    document.getElementById('modal-countdown').innerHTML = '<div class="expired-stamp modal-expired">已过期</div>';
+                    clearInterval(modalCountdownTimer);
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('modal-countdown').innerHTML = `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+            } catch (error) {
+                document.getElementById('modal-countdown').innerHTML = "计算错误";
+            }
+        }
+        
+        // 关闭会议详情模态框
+        function closeConferenceModal() {
+            document.getElementById('conference-modal').classList.remove('show');
+            clearInterval(modalCountdownTimer);
+            selectedConference = null;
+        }
+
         // 启动所有倒计时（DOM已完全构建后）
         function startAllCountdowns() {
             conferences.forEach(conference => {
@@ -333,6 +444,9 @@
             this.style.opacity = '1';
         }
 
+        // 模态框倒计时定时器
+        let modalCountdownTimer = null;
+
         // 页面加载完成后执行
         document.addEventListener('DOMContentLoaded', function() {
             // 首先检测设备类型
@@ -354,6 +468,14 @@
                 // 如果设备类型发生变化，重新加载会议列表
                 if (wasDesktop !== isDesktop) {
                     loadConferences();
+                }
+            });
+            
+            // 当点击模态框外部区域时关闭模态框
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('conference-modal');
+                if (event.target === modal) {
+                    closeConferenceModal();
                 }
             });
         });
