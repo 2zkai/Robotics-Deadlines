@@ -24,15 +24,9 @@ git clone https://github.com/your-username/Robotics-Deadlines.git
 cd Robotics-Deadlines
 ```
 
-2. 使用任意静态网站服务器（如serve）
+2. 使用任意静态网站服务器运行
 ```bash
 npx serve src/public
-```
-
-或使用简化后的Express服务器（仅开发用）
-```bash
-npm install
-npm start
 ```
 
 访问 http://localhost:3000 即可查看应用
@@ -60,10 +54,9 @@ let conferences = [
 ```
 Robotics-Deadlines/
 ├── src/
-│   ├── public/
-│   │   ├── index.html   # 主页HTML和JavaScript
-│   │   └── style.css    # 样式表
-│   └── server.js        # 本地开发服务器（可选）
+│   └── public/
+│       ├── index.html   # 主页HTML和JavaScript
+│       └── style.css    # 样式表
 ├── package.json
 └── README.md
 ```
@@ -76,14 +69,4 @@ Robotics-Deadlines/
 
 ## 部署方式
 
-### GitHub Pages 部署
-
-1. Fork本仓库
-2. 启用GitHub Pages，选择`src/public`目录作为发布源
-3. 访问生成的GitHub Pages网址
-
-### Netlify/Vercel 部署
-
-1. 导入项目
-2. 设置发布目录为`src/public`
-3. 部署网站
+详见 [DEPLOY.md](DEPLOY.md) 文档了解详细部署指南。
