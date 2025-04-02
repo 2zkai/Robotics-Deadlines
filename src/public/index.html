@@ -272,13 +272,25 @@
             // 显示模态框
             document.getElementById('conference-modal').classList.add('show');
             
-            // 添加点击事件以关闭模态框
-            document.querySelector('.modal-close').addEventListener('click', closeConferenceModal);
-            
             // 启动倒计时定时器
             modalCountdownTimer = setInterval(updateModalCountdown, 1000);
         }
         
+        // 关闭会议详情模态框
+        function closeConferenceModal() {
+            // 隐藏模态框
+            document.getElementById('conference-modal').classList.remove('show');
+            
+            // 清除模态框倒计时定时器
+            if (modalCountdownTimer) {
+                clearInterval(modalCountdownTimer);
+                modalCountdownTimer = null;
+            }
+            
+            // 清空选中的会议
+            selectedConference = null;
+        }
+
         // 更新模态框内的倒计时
         function updateModalCountdown() {
             if (!selectedConference) return;
@@ -501,6 +513,9 @@
                     closeConferenceModal();
                 }
             });
+            
+            // 为关闭按钮添加事件监听 - 使用事件委托以避免重复绑定
+            document.querySelector('.modal-close').addEventListener('click', closeConferenceModal);
         });
     </script>
 </body>
