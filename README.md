@@ -21,7 +21,7 @@
 
 1. 克隆仓库
 ```bash
-git clone https://github.com/your-username/Robotics-Deadlines.git
+git clone git@github.com:2zkai/Robotics-Deadlines.git
 cd Robotics-Deadlines
 ```
 
