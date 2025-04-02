@@ -80,7 +80,3 @@ Robotics-Deadlines/
   "category": "新分类"
 }
 ```
-
-## 许可证
-
-MIT License
