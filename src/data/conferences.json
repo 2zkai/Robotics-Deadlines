@@ -4,28 +4,28 @@
     "name": "ICRA 2024",
     "deadline": "2023-09-15T23:59:59",
     "category": "strongly-robotics",
-    "ccf": "A"
+    "ccf": "B"
   },
   {
     "id": 2,
     "name": "IROS 2024",
     "deadline": "2024-03-01T23:59:59",
     "category": "strongly-robotics",
-    "ccf": "B"
+    "ccf": "c"
   },
   {
     "id": 3,
     "name": "CoRL 2025",
     "deadline": "2025-04-30T23:59:59",
     "category": "somewhere-between",
-    "ccf": "C"
+    "ccf": "N"
   },
   {
     "id": 4,
     "name": "RSS 2024",
     "deadline": "2024-01-31T23:59:59",
     "category": "strongly-robotics",
-    "ccf": "A"
+    "ccf": "N"
   },
   {
     "id": 5,
@@ -39,7 +39,7 @@
     "name": "HRI 2024",
     "deadline": "2023-10-05T23:59:59",
     "category": "strongly-robotics",
-    "ccf": "B"
+    "ccf": "N"
   },
   {
     "id": 7,
