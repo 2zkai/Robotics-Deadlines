@@ -8,16 +8,15 @@
 - 🔍 按研究领域分类展示会议信息
 - 📱 响应式设计，支持移动端访问
 - 🔄 动态更新倒计时显示
-- 💾 本地数据库存储会议信息
+- 🌐 支持静态部署，零数据库依赖
 
 ## 快速开始
 
-### 前置要求
+### 方法一：直接使用（静态网站）
 
-- Node.js (v12.0.0 或更高版本)
-- npm (v6.0.0 或更高版本)
+1. 直接访问 [GitHub Pages地址](#) 即可查看最新的截稿信息
 
-### 安装步骤
+### 方法二：本地运行
 
 1. 克隆仓库
 ```bash
@@ -25,17 +24,36 @@ git clone https://github.com/your-username/Robotics-Deadlines.git
 cd Robotics-Deadlines
 ```
 
-2. 安装依赖
+2. 使用任意静态网站服务器（如serve）
 ```bash
-npm install
+npx serve src/public
 ```
 
-3. 启动服务器
+或使用简化后的Express服务器（仅开发用）
 ```bash
+npm install
 npm start
 ```
 
 访问 http://localhost:3000 即可查看应用
+
+## 如何添加/更新会议
+
+直接修改 `src/public/index.html` 文件中的 conferences 数组数据：
+
+```javascript
+let conferences = [
+  {
+    "id": 1,
+    "name": "会议名称",
+    "deadline": "截稿日期 (YYYY-MM-DDThh:mm:ss 格式)",
+    "category": "分类 (strongly-robotics/somewhere-between/strongly-ai)",
+    "ccf": "CCF分级 (A/B/C/N)",
+    "description": "会议描述"
+  },
+  // 更多会议...
+];
+```
 
 ## 项目结构
 
@@ -43,11 +61,9 @@ npm start
 Robotics-Deadlines/
 ├── src/
 │   ├── public/
-│   │   ├── index.html
-│   │   └── style.css
-│   ├── server.js
-│   ├── database.js
-│   └── init-data.js
+│   │   ├── index.html   # 主页HTML和JavaScript
+│   │   └── style.css    # 样式表
+│   └── server.js        # 本地开发服务器（可选）
 ├── package.json
 └── README.md
 ```
@@ -58,25 +74,16 @@ Robotics-Deadlines/
 - 交叉领域 (Somewhere Between)
 - 与AI强相关 (Strongly Related to AI)
 
-## API 接口
+## 部署方式
 
-### GET /api/conferences
-获取所有会议信息
+### GitHub Pages 部署
 
-### POST /api/conferences
-添加新会议
-```json
-{
-  "name": "会议名称",
-  "deadline": "截稿日期",
-  "category": "分类"
-}
-```
+1. Fork本仓库
+2. 启用GitHub Pages，选择`src/public`目录作为发布源
+3. 访问生成的GitHub Pages网址
 
-### PUT /api/conferences/:id/category
-更新会议分类
-```json
-{
-  "category": "新分类"
-}
-```
+### Netlify/Vercel 部署
+
+1. 导入项目
+2. 设置发布目录为`src/public`
+3. 部署网站

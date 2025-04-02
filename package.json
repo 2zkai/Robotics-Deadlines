@@ -4,10 +4,14 @@
   "description": "Robotics conference deadline countdown system",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "serve": "npx serve src/public"
   },
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "serve": "^14.0.0"
   },
   "author": "Zhao Zhikai",
   "license": "MIT"
