@@ -7,6 +7,19 @@
     font-family: 'VT323', monospace;
 }
 
+/* 添加Zpix字体声明 */
+@font-face {
+    font-family: 'Zpix';
+    src: url('https://cdn.jsdelivr.net/gh/SolidZORO/zpix-pixel-font@latest/dist/Zpix.ttf') format('truetype');
+    font-display: swap;
+}
+
+/* 为中文内容指定字体 */
+.chinese-text {
+    font-family: 'Zpix', monospace;
+    letter-spacing: 1px;
+}
+
 body {
     background-color: #3f3851;
     color: #e8e0c9;
@@ -71,6 +84,7 @@ body {
     text-shadow: 2px 2px 0 #000;
     letter-spacing: 2px;
     margin: 0;
+    font-family: 'Zpix', 'VT323', monospace; /* 为标题添加Zpix字体 */
 }
 
 .subtitle {
@@ -104,6 +118,7 @@ body {
     justify-content: space-between;
     align-items: center;
     text-shadow: 1px 1px 0 #000;
+    font-family: 'Zpix', 'VT323', monospace; /* 为分类标题添加Zpix字体 */
 }
 
 .category-section h2 .english-title {
@@ -145,6 +160,7 @@ body {
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+    font-family: 'Zpix', 'VT323', monospace; /* 为会议名称添加Zpix字体 */
 }
 
 .quest-details {
@@ -235,6 +251,7 @@ body {
     margin: 5px 0 10px 0;
     font-size: 16px;
     line-height: 1.4;
+    font-family: 'Zpix', 'VT323', monospace; /* 为会议描述添加Zpix字体 */
 }
 
 /* 暂无会议提示样式 */
@@ -246,6 +263,7 @@ body {
     background-color: #3c362e;
     border-radius: 8px;
     border-left: 8px solid #6a563f;
+    font-family: 'Zpix', 'VT323', monospace; /* 为无会议提示添加Zpix字体 */
 }
 
 /* 加载指示器样式 */
@@ -265,6 +283,7 @@ body {
     font-size: 24px;
     text-shadow: 1px 1px 0 #000;
     position: relative;
+    font-family: 'Zpix', 'VT323', monospace; /* 为加载文本添加Zpix字体 */
 }
 
 .loading-text:after {
@@ -294,6 +313,7 @@ body {
     color: #ff6b6b;
     font-size: 20px;
     text-shadow: 1px 1px 0 #000;
+    font-family: 'Zpix', 'VT323', monospace; /* 为错误信息添加Zpix字体 */
 }
 
 /* 动画效果 */
@@ -357,6 +377,7 @@ body {
     white-space: nowrap;
     image-rendering: pixelated;
     margin: 5px auto;
+    font-family: 'Zpix', 'VT323', monospace; /* 为过期印章添加Zpix字体 */
 }
 
 .expired-stamp::before {
@@ -445,6 +466,7 @@ body {
     font-size: 24px;
     margin: 0;
     text-shadow: 1px 1px 0 #000;
+    font-family: 'Zpix', 'VT323', monospace; /* 为模态框标题添加Zpix字体 */
 }
 
 .modal-close {
@@ -486,6 +508,7 @@ body {
     border-bottom: 1px solid #ffd866;
     padding-bottom: 6px;
     text-shadow: 1px 1px 0 #000;
+    font-family: 'Zpix', 'VT323', monospace; /* 为模态框小节标题添加Zpix字体 */
 }
 
 .modal-section-content {
@@ -493,6 +516,7 @@ body {
     margin: 0;
     font-size: 16px;
     line-height: 1.4;
+    font-family: 'Zpix', 'VT323', monospace; /* 为模态框内容添加Zpix字体 */
 }
 
 #modal-countdown {
@@ -553,10 +577,12 @@ body {
     
     .board-header h1 {
         font-size: 22px;
+        font-family: 'Zpix', 'VT323', monospace; /* 为标题添加Zpix字体 */
     }
     
     .category-section h2 {
         font-size: 1.3em;
+        font-family: 'Zpix', 'VT323', monospace; /* 为分类标题添加Zpix字体 */
     }
     
     /* 小屏幕下CCF标签样式调整 */
@@ -571,6 +597,7 @@ body {
         align-items: flex-start;
         gap: 5px;
         font-size: 20px;
+        font-family: 'Zpix', 'VT323', monospace; /* 为会议名称添加Zpix字体 */
     }
     
     /* 增加触摸区域 */
@@ -591,7 +618,6 @@ body {
         width: 60px;
         height: 60px;
         font-size: 14px;
-        border: 3px solid #ff4444;
     }
 
     .modal-content {
@@ -606,6 +632,7 @@ body {
     
     .modal-header h2 {
         font-size: 20px;
+        font-family: 'Zpix', 'VT323', monospace; /* 为模态框标题添加Zpix字体 */
     }
     
     .modal-section {
@@ -615,10 +642,12 @@ body {
     
     .modal-section-title {
         font-size: 16px;
+        font-family: 'Zpix', 'VT323', monospace; /* 为模态框小节标题添加Zpix字体 */
     }
     
     .modal-section-content {
         font-size: 14px;
+        font-family: 'Zpix', 'VT323', monospace; /* 为模态框内容添加Zpix字体 */
     }
 }
 
@@ -640,6 +669,7 @@ body {
     
     .board-header h1 {
         font-size: 18px;
+        font-family: 'Zpix', 'VT323', monospace; /* 为标题添加Zpix字体 */
     }
     
     .subtitle {
@@ -648,6 +678,7 @@ body {
     
     .conference-name {
         font-size: 18px;
+        font-family: 'Zpix', 'VT323', monospace; /* 为会议名称添加Zpix字体 */
     }
     
     .category-section {
@@ -657,6 +688,7 @@ body {
     
     .category-section h2 {
         font-size: 1.1em;
+        font-family: 'Zpix', 'VT323', monospace; /* 为分类标题添加Zpix字体 */
     }
     
     /* 单列布局确保可读性 */
@@ -667,6 +699,7 @@ body {
     .conference-description {
         font-size: 14px;
         margin: 4px 0 8px 0;
+        font-family: 'Zpix', 'VT323', monospace; /* 为会议描述添加Zpix字体 */
     }
     
     /* 优化板钉在小屏幕设备上的位置 */
@@ -680,7 +713,6 @@ body {
         width: 50px;
         height: 50px;
         font-size: 12px;
-        border: 2px solid #ff4444;
     }
     
     .expired-stamp::before {
@@ -764,6 +796,7 @@ body.mobile-device {
 .mobile-device .board-header h1 {
     font-size: 20px;
     letter-spacing: 1px;
+    font-family: 'Zpix', 'VT323', monospace; /* 为标题添加Zpix字体 */
 }
 
 .mobile-device .header-subtitle {
@@ -786,12 +819,14 @@ body.mobile-device {
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
+    font-family: 'Zpix', 'VT323', monospace; /* 为会议名称添加Zpix字体 */
 }
 
 .mobile-device .conference-description {
     font-size: 14px;
     margin: 4px 0 6px 0;
     line-height: 1.3;
+    font-family: 'Zpix', 'VT323', monospace; /* 为会议描述添加Zpix字体 */
 }
 
 /* 针对移动设备优化的过期印章样式 */
@@ -815,6 +850,7 @@ body.mobile-device {
     z-index: 10;
     text-shadow: 1px 1px 0 #000;
     margin: 0; /* 覆盖原有的margin设置 */
+    font-family: 'Zpix', 'VT323', monospace; /* 为过期印章添加Zpix字体 */
 }
 
 .mobile-device .expired-stamp::before {
@@ -892,6 +928,7 @@ body.mobile-device {
 .mobile-device .category-section h2 {
     font-size: 1.2em;
     padding-bottom: 8px;
+    font-family: 'Zpix', 'VT323', monospace; /* 为分类标题添加Zpix字体 */
 }
 
 .mobile-device .category-section h2 .english-title {
@@ -978,6 +1015,7 @@ body.mobile-device {
     color: #e8d4b5;
     text-shadow: 2px 2px 0px #2a2018;
     letter-spacing: 1px;
+    font-family: 'Zpix', 'VT323', monospace; /* 为版权文本添加Zpix字体 */
 }
 
 /* GitHub按钮容器 */
@@ -1036,6 +1074,7 @@ body.mobile-device {
 /* 按钮文本 */
 .button-text {
     letter-spacing: 1px;
+    font-family: 'Zpix', 'VT323', monospace; /* 为按钮文本添加Zpix字体 */
 }
 
 /* 移动设备响应式设计 */

@@ -8,6 +8,8 @@
     <!-- 预加载字体 -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=VT323&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <!-- 预加载 Zpix 字体 -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/SolidZORO/zpix-pixel-font@latest/dist/Zpix.ttf" as="font" type="font/ttf" crossorigin>
 </head>
 <body>
     <div class="container">
@@ -18,13 +20,13 @@
             <div class="board-nails nail-4"></div>
             
             <div class="board-header">
-                <h1>※ 机器人投稿任务板 ※</h1>
+                <h1 class="chinese-text">※ 机器人投稿任务板 ※</h1>
                 <div class="header-subtitle">Robotics Deadlines (Full paper submission)</div>
             </div>
             
             <!-- 添加加载指示器 -->
             <div id="loading-indicator" class="loading-indicator">
-                <div class="loading-text">正在加载任务列表...</div>
+                <div class="loading-text chinese-text">正在加载任务列表...</div>
             </div>
             
             <div id="conferences" class="conferences-list"></div>
@@ -35,7 +37,7 @@
                 <div class="copyright-container">
                     <div class="scroll-icon left"></div>
                     <div class="copyright-text">
-                        &copy; 2023 Robotics-Deadlines | 赵治凯 (Zhao Zhikai)
+                        &copy; 2023 Robotics-Deadlines | <span class="chinese-text">赵治凯</span> (Zhao Zhikai)
                     </div>
                     <div class="scroll-icon right"></div>
                 </div>
@@ -44,7 +46,7 @@
                     <a href="https://github.com/2zkai/Robotics-Deadlines" target="_blank" class="github-link">
                         <div class="pixel-button">
                             <span class="github-icon">⚔️</span>
-                            <span class="button-text">查看 GitHub 宝库</span>
+                            <span class="button-text chinese-text">查看 GitHub 宝库</span>
                             <span class="github-icon">⚔️</span>
                         </div>
                     </a>
@@ -62,22 +64,22 @@
             <div class="board-nails modal-nail-4"></div>
             
             <div class="modal-header">
-                <h2 id="modal-title">会议详情</h2>
+                <h2 id="modal-title" class="chinese-text">会议详情</h2>
                 <button class="modal-close">&times;</button>
             </div>
             
             <div class="modal-body">
                 <div id="modal-ccf" class="modal-ccf"></div>
                 <div class="modal-section">
-                    <h3 class="modal-section-title">描述</h3>
+                    <h3 class="modal-section-title chinese-text">描述</h3>
                     <p id="modal-description" class="modal-section-content"></p>
                 </div>
                 <div class="modal-section">
-                    <h3 class="modal-section-title">截稿日期</h3>
+                    <h3 class="modal-section-title chinese-text">截稿日期</h3>
                     <p id="modal-deadline" class="modal-section-content"></p>
                 </div>
                 <div class="modal-section">
-                    <h3 class="modal-section-title">倒计时</h3>
+                    <h3 class="modal-section-title chinese-text">倒计时</h3>
                     <div id="modal-countdown" class="modal-section-content"></div>
                 </div>
             </div>
@@ -146,7 +148,7 @@
                 })
                 .catch(error => {
                     console.error('获取会议数据错误:', error);
-                    loadingIndicator.innerHTML = '<div class="error-message">加载失败，请刷新页面重试</div>';
+                    loadingIndicator.innerHTML = '<div class="error-message chinese-text">加载失败，请刷新页面重试</div>';
                 });
         }
         
@@ -160,7 +162,7 @@
                 categoryDiv.classList.add("category-section");
                 categoryDiv.innerHTML = `
                     <h2>
-                        ${category.chinese}
+                        <span class="chinese-text">${category.chinese}</span>
                         <span class="english-title">${category.english}</span>
                     </h2>
                 `;
@@ -189,6 +191,11 @@
                             ? `<span class="ccf-tag ccf-${conference.ccf.toLowerCase()}" style="background-color: ${ccfColors[conference.ccf] || ccfColors['']}">CCF ${conference.ccf}</span>` 
                             : '';
 
+                        // 将会议描述包装在 chinese-text 类中
+                        const description = conference.description ? 
+                            `<p class="conference-description chinese-text">${conference.description || '无描述'}</p>` : 
+                            `<p class="conference-description chinese-text">无描述</p>`;
+
                         // 根据设备类型使用不同的模板
                         if (isDesktop) {
                             questItem.innerHTML = `
@@ -196,12 +203,12 @@
                                     ${conference.name}
                                     ${ccfTag}
                                 </h3>
-                                <p class="conference-description">${conference.description || '无描述'}</p>
+                                ${description}
                                 <div class="quest-details desktop-details">
                                     <div class="quest-difficulty">
-                                        <div class="deadline">截稿日期: ${formatDate(conference.deadline)}</div>
+                                        <div class="deadline chinese-text">截稿日期: ${formatDate(conference.deadline)}</div>
                                     </div>
-                                    <div id="countdown-${conference.id}" class="countdown">计算中...</div>
+                                    <div id="countdown-${conference.id}" class="countdown chinese-text">计算中...</div>
                                 </div>
                             `;
                         } else {
@@ -210,12 +217,12 @@
                                     ${conference.name}
                                     ${ccfTag}
                                 </h3>
-                                <p class="conference-description">${conference.description || '无描述'}</p>
+                                ${description}
                                 <div class="quest-details mobile-details">
                                     <div class="quest-difficulty">
-                                        <div class="deadline">截稿日期: ${formatDate(conference.deadline)}</div>
+                                        <div class="deadline chinese-text">截稿日期: ${formatDate(conference.deadline)}</div>
                                     </div>
-                                    <div id="countdown-${conference.id}" class="countdown">计算中...</div>
+                                    <div id="countdown-${conference.id}" class="countdown chinese-text">计算中...</div>
                                 </div>
                             `;
                         }
@@ -230,7 +237,7 @@
                     
                     categoryDiv.appendChild(questList);
                 } else {
-                    categoryDiv.innerHTML += '<p class="no-conferences">暂无任务</p>';
+                    categoryDiv.innerHTML += '<p class="no-conferences chinese-text">暂无任务</p>';
                 }
                 
                 fragment.appendChild(categoryDiv);
@@ -247,6 +254,7 @@
             // 填充模态框内容
             document.getElementById('modal-title').textContent = conference.name;
             document.getElementById('modal-description').textContent = conference.description || '无描述';
+            document.getElementById('modal-description').classList.add('chinese-text');
             document.getElementById('modal-deadline').textContent = formatDate(conference.deadline);
             
             // 设置CCF标签
@@ -280,14 +288,14 @@
                 const deadlineDate = new Date(selectedConference.deadline);
                 
                 if (isNaN(deadlineDate.getTime())) {
-                    document.getElementById('modal-countdown').innerHTML = "日期格式错误";
+                    document.getElementById('modal-countdown').innerHTML = `<span class="chinese-text">日期格式错误</span>`;
                     return;
                 }
                 
                 const distance = deadlineDate.getTime() - now + (20 * 60 * 60 * 1000);
 
                 if (distance < 0) {
-                    document.getElementById('modal-countdown').innerHTML = '<div class="expired-stamp modal-expired">已过期</div>';
+                    document.getElementById('modal-countdown').innerHTML = '<div class="expired-stamp modal-expired chinese-text">已过期</div>';
                     clearInterval(modalCountdownTimer);
                     return;
                 }
@@ -297,17 +305,10 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                document.getElementById('modal-countdown').innerHTML = `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+                document.getElementById('modal-countdown').innerHTML = `<span class="chinese-text">${days}天 ${hours}时 ${minutes}分 ${seconds}秒</span>`;
             } catch (error) {
-                document.getElementById('modal-countdown').innerHTML = "计算错误";
+                document.getElementById('modal-countdown').innerHTML = `<span class="chinese-text">计算错误</span>`;
             }
-        }
-        
-        // 关闭会议详情模态框
-        function closeConferenceModal() {
-            document.getElementById('conference-modal').classList.remove('show');
-            clearInterval(modalCountdownTimer);
-            selectedConference = null;
         }
 
         // 启动所有倒计时（DOM已完全构建后）
@@ -374,9 +375,9 @@
                     if (distance < 0) {
                         // 根据设备类型使用不同的过期标记
                         if (isDesktop) {
-                            countdownElement.innerHTML = '<div class="expired-stamp">已过期</div>';
+                            countdownElement.innerHTML = '<div class="expired-stamp chinese-text">已过期</div>';
                         } else {
-                            countdownElement.innerHTML = '<div class="expired-stamp">已过期</div>';
+                            countdownElement.innerHTML = '<div class="expired-stamp chinese-text">已过期</div>';
                             // 给整个任务项添加过期类
                             const questItem = countdownElement.closest('.quest-item');
                             if (questItem) {
@@ -394,7 +395,7 @@
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                    countdownElement.innerHTML = `${days}天 ${hours}时 ${minutes}分 ${seconds}秒`;
+                    countdownElement.innerHTML = `<span class="chinese-text">${days}天 ${hours}时 ${minutes}分 ${seconds}秒</span>`;
                 } catch (error) {
                     console.error(`倒计时更新错误: ${error.message}`);
                     countdownElement.innerHTML = "计算错误";
