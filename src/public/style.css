@@ -924,3 +924,134 @@ body.mobile-device {
 .desktop-device .quest-item {
     height: 100%;
 }
+
+/* 页脚分隔线 */
+.footer-divider {
+    height: 4px;
+    margin: 25px 0 15px;
+    background-color: #4e3c29;
+    position: relative;
+    image-rendering: pixelated;
+}
+
+.pixel-border-thin {
+    border: 2px solid #2a2018;
+    box-shadow: inset 0 0 0 2px rgba(255, 235, 188, 0.3);
+}
+
+/* 页脚容器 */
+.pixel-footer {
+    padding: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'VT323', monospace;
+    margin-top: 10px;
+}
+
+/* 版权信息容器 */
+.copyright-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* 卷轴图标 */
+.scroll-icon {
+    width: 24px;
+    height: 24px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23cdab74" d="M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12L10,4H6Z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 0 10px;
+    image-rendering: pixelated;
+}
+
+.scroll-icon.right {
+    transform: scaleX(-1);
+}
+
+/* 版权文本 */
+.copyright-text {
+    font-size: 18px;
+    color: #e8d4b5;
+    text-shadow: 2px 2px 0px #2a2018;
+    letter-spacing: 1px;
+}
+
+/* GitHub按钮容器 */
+.github-button-container {
+    margin-top: 5px;
+}
+
+/* GitHub链接 */
+.github-link {
+    text-decoration: none;
+}
+
+/* 像素风按钮 */
+.pixel-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    background-color: #8b6c42;
+    border: 3px solid #4e3c29;
+    box-shadow: 
+        inset 0 0 0 1px rgba(255, 235, 188, 0.4),
+        0 4px 0 0 #2a2018;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    color: #ffebbc;
+    text-shadow: 2px 2px 0px #2a2018;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    min-width: 200px;
+    image-rendering: pixelated;
+}
+
+.pixel-button:hover {
+    background-color: #9d7a4d;
+    transform: translateY(2px);
+    box-shadow: 
+        inset 0 0 0 1px rgba(255, 235, 188, 0.4),
+        0 2px 0 0 #2a2018;
+}
+
+.pixel-button:active {
+    transform: translateY(4px);
+    box-shadow: 
+        inset 0 0 0 1px rgba(255, 235, 188, 0.4),
+        0 0 0 0 #2a2018;
+}
+
+/* GitHub图标 */
+.github-icon {
+    margin: 0 6px;
+    font-size: 18px;
+}
+
+/* 按钮文本 */
+.button-text {
+    letter-spacing: 1px;
+}
+
+/* 移动设备响应式设计 */
+@media (max-width: 768px) {
+    .copyright-text {
+        font-size: 16px;
+    }
+    
+    .pixel-button {
+        font-size: 18px;
+        min-width: 180px;
+        padding: 6px 12px;
+    }
+    
+    .scroll-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
