@@ -84,7 +84,3 @@ Robotics-Deadlines/
 ## 许可证
 
 MIT License
-
-## 作者
-
-赵治凯 (Zhao Zhikai)
