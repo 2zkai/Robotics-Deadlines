@@ -75,6 +75,10 @@
                     <p id="modal-description" class="modal-section-content"></p>
                 </div>
                 <div class="modal-section">
+                    <h3 class="modal-section-title chinese-text">官网</h3>
+                    <a id="modal-website" class="modal-section-content" target="_blank" rel="noopener noreferrer"></a>
+                </div>
+                <div class="modal-section">
                     <h3 class="modal-section-title chinese-text">截稿日期</h3>
                     <p id="modal-deadline" class="modal-section-content"></p>
                 </div>
@@ -90,18 +94,20 @@
         let conferences = [
             {
                 "id": 1,
-                "name": "ICRA 2024",
-                "deadline": "2023-09-15T23:59:59",
+                "name": "ICRA 2025",
+                "deadline": "2024-09-15T23:59:59",
                 "category": "strongly-robotics",
                 "ccf": "B",
+                "website": "https://2025.ieee-icra.org/",
                 "description": "IEEE国际机器人与自动化会议，机器人领域顶级会议之一"
             },
             {
                 "id": 2,
-                "name": "IROS 2024",
-                "deadline": "2024-03-01T23:59:59",
+                "name": "IROS 2025",
+                "deadline": "2025-03-02T23:59:59",
                 "category": "strongly-robotics",
                 "ccf": "C",
+                "website": "https://www.iros25.org/",
                 "description": "IEEE/RSJ智能机器人与系统国际会议"
             },
             {
@@ -110,22 +116,25 @@
                 "deadline": "2025-04-30T23:59:59",
                 "category": "somewhere-between",
                 "ccf": "N",
+                "website": "https://www.corl.org/",
                 "description": "机器人学习会议，关注机器学习在机器人领域的应用"
             },
             {
                 "id": 4,
-                "name": "RSS 2024",
-                "deadline": "2024-01-31T23:59:59",
+                "name": "RSS 2025",
+                "deadline": "2025-01-31T23:59:59",
                 "category": "strongly-robotics",
                 "ccf": "N",
+                "website": "https://roboticsconference.org/",
                 "description": "机器人科学与系统会议，机器人领域高质量会议"
             },
             {
                 "id": 5,
-                "name": "CVPR 2024",
-                "deadline": "2023-11-10T23:59:59",
+                "name": "CVPR 2025",
+                "deadline": "2024-11-15T23:59:59",
                 "category": "somewhere-between",
                 "ccf": "A",
+                "website": "https://cvpr.thecvf.com/",
                 "description": "计算机视觉与模式识别会议，计算机视觉领域顶级会议"
             },
             {
@@ -142,6 +151,7 @@
                 "deadline": "2025-05-15T23:59:59",
                 "category": "strongly-ai",
                 "ccf": "A",
+                "website": "https://neurips.cc/",
                 "description": "神经信息处理系统会议，人工智能领域顶级会议"
             },
             {
@@ -150,7 +160,17 @@
                 "deadline": "2025-01-26T23:59:59",
                 "category": "strongly-ai",
                 "ccf": "A",
+                "website": "https://icml.cc/",
                 "description": "国际机器学习会议，机器学习领域顶级会议"
+            },
+            {
+                "id": 9,
+                "name": "ICLR 2025",
+                "deadline": "2024-10-01T23:59:59",
+                "category": "strongly-ai",
+                "ccf": "A",
+                "website": "https://iclr.cc/",
+                "description": "国际表征学习大会, 深度学习领域顶级会议"
             }
         ];
         // 存储所有定时器的对象
@@ -318,6 +338,8 @@
             document.getElementById('modal-title').textContent = conference.name;
             document.getElementById('modal-description').textContent = conference.description || '无描述';
             document.getElementById('modal-description').classList.add('chinese-text');
+            document.getElementById('modal-website').textContent = conference.website || 'TBD';
+            document.getElementById('modal-website').href = conference.website || '#';
             document.getElementById('modal-deadline').textContent = formatDate(conference.deadline);
             
             // 设置CCF标签
