@@ -1,15 +1,19 @@
 [
   {
     "id": 1,
-    "name": "ICRA 2024",
-    "deadline": "2023-09-15T23:59:59",
+    "name": "ICRA 2025",
+    "deadline": "2024-09-15T23:59:59",
+    "description": "IEEE经典机器人会议，涵盖最广的机器人学领域。",
+    "website": "https://2025.ieee-icra.org/",
     "category": "strongly-robotics",
     "ccf": "B"
   },
   {
     "id": 2,
-    "name": "IROS 2024",
-    "deadline": "2024-03-01T23:59:59",
+    "name": "IROS 2025",
+    "deadline": "2025-03-02T23:59:59",
+    "description": "稍逊于ICRA，可作为ICRA拒稿后的去处。",
+    "website": "https://www.iros25.org/",
     "category": "strongly-robotics",
     "ccf": "C"
   },
@@ -17,20 +21,26 @@
     "id": 3,
     "name": "CoRL 2025",
     "deadline": "2025-04-30T23:59:59",
+    "description": "新兴的机器人学习会议，聚焦于机器人与机器学习的交叉领域。",
+    "website": "https://www.corl.org/",
     "category": "somewhere-between",
     "ccf": "N"
   },
   {
     "id": 4,
-    "name": "RSS 2024",
-    "deadline": "2024-01-31T23:59:59",
+    "name": "RSS 2025",
+    "deadline": "2025-01-31T23:59:59",
+    "description": "机器人领域的顶级会议，注重理论和实验的结合。",
+    "website": "https://roboticsconference.org/",
     "category": "strongly-robotics",
     "ccf": "N"
   },
   {
     "id": 5,
-    "name": "CVPR 2024",
-    "deadline": "2023-11-10T23:59:59",
+    "name": "CVPR 2025",
+    "deadline": "2024-11-15T23:59:59",
+    "description": "计算机视觉领域的顶级会议，亦有众多机器人相关投稿。",
+    "website": "https://cvpr.thecvf.com/",
     "category": "somewhere-between",
     "ccf": "A"
   },
@@ -45,13 +55,24 @@
     "id": 7,
     "name": "NeurIPS 2025",
     "deadline": "2025-05-15T23:59:59",
+    "description": "三大会之一，相较于ICML和ICLR拥有更强的交叉应用。",
+    "website": "https://neurips.cc/",
     "category": "strongly-ai",
     "ccf": "A"
   },
   {
     "id": 8,
     "name": "ICML 2025",
+    "description": "三大会之一，相较于NeurIPS和ICLR拥有更强的理论要求。",
     "deadline": "2025-01-26T23:59:59",
+    "category": "strongly-ai",
+    "ccf": "A"
+  },
+  {
+    "id": 9,
+    "name": "ICLR 2026",
+    "description": "三大会之一，顶级审稿流程，Openreview世界大舞台，有胆你就来。",
+    "deadline": "2025-10-03T23:59:59",
     "category": "strongly-ai",
     "ccf": "A"
   }

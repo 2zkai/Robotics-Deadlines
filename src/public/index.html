@@ -75,6 +75,11 @@
                     <p id="modal-description" class="modal-section-content"></p>
                 </div>
                 <div class="modal-section">
+                    <h3 class="modal-section-title chinese-text">官网</h3>
+                    <!-- <p id="modal-website" class="modal-section-content"></p> -->
+                    <a id="modal-website" class="modal-section-content" target="_blank" rel="noopener noreferrer"></a>
+                </div>
+                <div class="modal-section">
                     <h3 class="modal-section-title chinese-text">截稿日期</h3>
                     <p id="modal-deadline" class="modal-section-content"></p>
                 </div>
@@ -255,6 +260,8 @@
             document.getElementById('modal-title').textContent = conference.name;
             document.getElementById('modal-description').textContent = conference.description || '无描述';
             document.getElementById('modal-description').classList.add('chinese-text');
+            document.getElementById('modal-website').textContent = conference.website || 'TBD';
+            document.getElementById('modal-website').href = conference.website || '#';
             document.getElementById('modal-deadline').textContent = formatDate(conference.deadline);
             
             // 设置CCF标签
